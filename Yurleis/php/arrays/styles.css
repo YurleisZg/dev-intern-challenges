@@ -1,0 +1,35 @@
+.title{
+    text-align: center;
+    margin-top: 20px;
+}
+.results {
+    width: 50%;
+    margin: 20px auto;
+    padding: 10px;      
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+.results ul {
+    list-style-type: none;
+    padding: 0;
+}
+.results li {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}

@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    background: #f8f8f8;
+    font-family: Arial, sans-serif;
+}
+
+/* Contenedor centrado */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Caja del login */
+.login-wrapper {
+    background: white;
+    padding: 35px;
+    width: 350px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+    border-top: 4px solid #4a90e2; /* mismo color del header */
+}
+
+/* Título */
+.login-wrapper h2 {
+    margin-top: 0;
+    color: #4a90e2;
+    font-weight: bold;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* Botón */
+button {
+    width: 100%;
+    padding: 12px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #3672b6;
+}
