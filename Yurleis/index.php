@@ -5,7 +5,7 @@ $projects = [
         [
             'title' => 'PHP Accountant',
             'description' => 'THis is a PHP project for accounting tasks',
-            'link' => 'accountant.php'
+            'link' => 'php/challenges/accountant/accountant.php'
         ],
         [
             'title' => 'Fruit Set',
