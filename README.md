@@ -28,14 +28,16 @@ The project is organized into a root Docker configuration and specific user fold
 │   ├── stage3/              # PHP Arrays & Search Logic 
 │   └── stage4/              # Forms & Sign Up exercises 
 └── Yurleis/                 # Workspace for Yurleis
-    ├── hmtl/                # HTML Auth & Landing pages 
+    ├── index.php            # Main entry point in root
+    ├── styles/              # CSS styles directory
+    ├── stage0/              # HTML Auth & Landing pages 
     └── php/                 # PHP specific exercises
-        ├── arrays/          # Array manipulation exercises 
-        ├── calculator/      # Calculator logic
-        ├── contact/         # Contact forms 
-        ├── form/            # General form handling 
-        ├── status/          # Login status and session handling 
-        └── index.php        # Main entry point for Yurleis 
+        ├── stage1/          # Basic PHP Index
+        ├── stage2/          # Calculator logic, Syntax, & Loops 
+        ├── stage3/          # Array manipulation exercises 
+        ├── stage4/          # General form handling 
+        ├── stage5/          # Login status and session handling 
+        └── challenges/      # Exercise folders
 ```
 
 ## 1. Prerequisites
