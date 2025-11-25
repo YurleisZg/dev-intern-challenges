@@ -13,41 +13,31 @@ include 'operations.php';
 </head>
 
 <body>
-    <?php include 'back_button.php'; ?>
     <h2 class="title">Accountant Form</h2>
-    <p class="description">This calculator helps you determine your total earnings based on your base salary.</p>
+    <div class="container">
     <form action="" method="post" class="form-container" id="accountant-form">
         <label for="base_salary">Please entry your base salary: </label>
         <input type="number" id="base_salary" name="base_salary" placeholder="Base Salary" required />
         <input type="hidden" name="rows" value="<?php echo htmlspecialchars($rows); ?>">
-        <h3>Overtime Shifts</h3>
-        <p>You can add as many overtime rows as you need</p>
+        <label><strong>Overtime Shifts</strong></label>
+        <label>You can add as many overtime rows as you need</label>
 
         <input type="hidden" name="rows" value="<?php echo htmlspecialchars($rows); ?>">
-
-        <h3>Overtime Shifts</h3>
-        <p>You can add as many overtime rows as you need</p>
 
         <?php for ($i = 0; $i < $rows; $i++):
             $date_value = $ot_dates[$i] ?? '';
             $start_value = $ot_starts[$i] ?? '';
             $end_value = $ot_ends[$i] ?? '';
             ?>
-            <div id="ot-row">
-                <div>
-                    <label>Date:</label>
-                    <input type="date" name="ot_date[]" value="<?php echo htmlspecialchars($date_value); ?>">
-                </div>
-                <div>
-                    <label>Start Time:</label>
-                    <input type="time" name="ot_start[]" value="<?php echo htmlspecialchars($start_value); ?>">
-                </div>
-                <div>
-                    <label>End Time:</label>
-                    <input type="time" name="ot_end[]" value="<?php echo htmlspecialchars($end_value); ?>">
-                </div>
+            <div id="ot-row" class="ot-rows">
+                <label>Date:</label>
+                <input type="date" name="ot_date[]" value="<?php echo htmlspecialchars($date_value); ?>">
+                <label>Start Time:</label>
+                <input type="time" name="ot_start[]" value="<?php echo htmlspecialchars($start_value); ?>">
+                <label>End Time:</label>
+                <input type="time" name="ot_end[]" value="<?php echo htmlspecialchars($end_value); ?>">
             </div>
-        <?php endfor; ?>
+            <?php endfor; ?>
 
         <div style="display:flex; gap:1rem; margin-top:1rem;">
             <button type="submit" name="action" value="add_row">+ Add Overtime Row</button>
@@ -55,7 +45,7 @@ include 'operations.php';
         </div>
     </form>
 
-    <div>
+    <div class="details-container">
         <h2 class="details">Details</h2>
         <h3 class="steps">Base Salary Breakdown</h3>
         <p class="content">Base salary: <?php echo number_format($base_salary, 2); ?> </p>
@@ -111,6 +101,7 @@ include 'operations.php';
 
             <h3 class="steps">Grand Total Net Salary <?php echo number_format($grand_total, 2); ?></h3>
         <?php endif; ?>
+    </div>
     </div>
 </body>
 

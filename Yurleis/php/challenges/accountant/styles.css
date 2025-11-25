@@ -1,8 +1,7 @@
-body {
+.container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    align-items: start;
+
 }
 .title {
     text-align: center;
@@ -11,15 +10,6 @@ body {
     font-weight: 700;
     color: #2c3e50;
 }
-
-.description {
-    font-size: 1.1rem;
-    color: #6c757d;
-    line-height: 1.6;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
 .form-container { 
     padding: 2rem; 
     border-radius: 12px; 
@@ -27,9 +17,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    width: 80%;
     background: #f8f9fa;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 850px;
+    max-width: 990px;
     margin: 0 auto;
 }
 
@@ -65,7 +56,6 @@ input[type="time"] {
     transition: border-color 0.3s ease;
 }
 
-
 button {
     padding: 0.75rem 1.5rem;
     background-color: #031c36;
@@ -76,6 +66,22 @@ button {
     cursor: pointer;
 }
 
+
+.ot-rows{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    width: 94%;
+}
+
+.details-container {
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    background: #f8f9fa;
+    width: 90%;
+}
 .table-container {
     margin: 1rem auto;
     width: 100%;
