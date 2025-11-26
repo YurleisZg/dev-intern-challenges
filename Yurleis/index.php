@@ -4,13 +4,13 @@ $projects = [
     'First Week' => [
         [
             'title' => 'PHP Accountant',
-            'description' => 'THis is a PHP project for accounting tasks',
+            'description' => 'Salary calculator with overtime support',
             'link' => 'php/challenges/accountant/accountant.php'
         ],
         [
             'title' => 'Fruit Set',
-            'description' => 'Marketing Analytics',
-            'link' => 'fruitset.php'
+            'description' => 'An interactive mini-game with two fruit baskets (Basket A and Basket B)',
+            'link' => 'php/challenges/fruit_set/fruit_set.php'
         ],
         [
             'title' => 'Project 3',
@@ -21,11 +21,11 @@ $projects = [
 
     'Second Week' => [
         [
-            'title' => 'Proyecto 4',
-            'description' => 'Descripcion del proyecto 4',
-            'link' => 'proyecto4.html'
+            'title' => 'Project 4',
+            'description' => 'Project 4 description',
+            'link' => 'project4.html'
+        ]
         ],
-    ]
 ];
 ?>
 

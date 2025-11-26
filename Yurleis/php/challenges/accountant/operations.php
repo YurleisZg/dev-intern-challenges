@@ -1,19 +1,20 @@
 <?php
 $action = $_POST['action'] ?? '';
 
+$base_salary = isset($_POST['base_salary']) ? (float) $_POST['base_salary'] : 0.0;
 
-$rows = isset($_POST['rows']) ? (int)$_POST['rows'] : 1;
-if ($rows < 1) {
-    $rows = 1;
-}
-if ($action === 'add_row') {
-    $rows++; 
+$date = $_POST['date_overtime'] ?? [];
+$start_time = $_POST['start_time_overtime'] ?? [];
+$end_time = $_POST['end_time_overtime'] ?? [];
+
+$rows = isset($_POST['rows']) ? (int) $_POST['rows'] : 0;
+if ($rows < 0) {
+    $rows = 0;
 }
 
-$base_salary = isset($_POST['base_salary']) ? (float)$_POST['base_salary'] : 0.0;
-$ot_dates  = $_POST['ot_date']  ?? [];
-$ot_starts = $_POST['ot_start'] ?? [];
-$ot_ends   = $_POST['ot_end']   ?? [];
+if ($action === 'add_overtime') {
+    $rows++;
+}
 
 function calculate_tax($base_salary)
 {
@@ -24,7 +25,6 @@ function calculate_tax($base_salary)
     }
     return $base_salary * 0.20;
 }
-
 function calculate_health_insurance($base_salary)
 {
     return $base_salary * 0.05;
@@ -38,63 +38,101 @@ function calculate_bonus($base_salary): int
     return 0;
 }
 
-if ($action === 'calculate' && $base_salary > 0) {
+function calculate_overtime_payment($base_salary, $date, $start_time, $end_time)
+{
+    $hourly_rate = $base_salary / 160;
 
+    $start = new DateTime("$date $start_time");
+    $end = new DateTime("$date $end_time");
+
+    if ($end <= $start) {
+        $end->modify('+1 day');
+    }
+
+    $interval = $start->diff($end);
+    $hours = $interval->h + ($interval->i / 60);
+    $extra_factor = 0.0;
+
+    $day_of_week = (int) $start->format('N');
+    if ($day_of_week === 7) {
+        $extra_factor += 0.50;
+    }
+
+    $start_time_str = $start->format('H:i');
+    if ($start_time_str >= '18:00') {
+        $extra_factor += 0.25;
+    }
+
+    $effective_rate = $hourly_rate * (1 + $extra_factor);
+    return $hours * $effective_rate;
+}
+
+
+$tax = 0;
+$health_insurance = 0;
+$bonus = 0;
+$final_base_net = 0;
+
+if ($action === 'calculate' && $base_salary > 0) {
     $tax = calculate_tax($base_salary);
     $health_insurance = calculate_health_insurance($base_salary);
     $bonus = calculate_bonus($base_salary);
     $final_base_net = $base_salary - $tax - $health_insurance + $bonus;
+}
+
+$overtime_details = [];
+$total_overtime_payment = 0;
+
+if ($action === 'calculate' && $rows > 0) {
 
     $hourly_rate = $base_salary / 160;
 
-    for ($i = 0; $i < count($ot_dates); $i++) {
-        $date  = trim($ot_dates[$i]  ?? '');
-        $start = trim($ot_starts[$i] ?? '');
-        $end   = trim($ot_ends[$i]   ?? '');
+    for ($i = 0; $i < $rows; $i++) {
 
-        if ($date === '' || $start === '' || $end === '') {
-            continue; 
+        if (empty($date[$i]) || empty($start_time[$i]) || empty($end_time[$i])) {
+            continue;
         }
 
-    
-        $start_dt = new DateTime("$date $start");
-        $end_dt   = new DateTime("$date $end");
+        $start = new DateTime($date[$i] . ' ' . $start_time[$i]);
+        $end = new DateTime($date[$i] . ' ' . $end_time[$i]);
 
-        if ($end_dt <= $start_dt) {
-            $end_dt->modify('+1 day');
+        if ($end <= $start) {
+            $end->modify('+1 day');
         }
 
-        $interval = $start_dt->diff($end_dt);
+        $interval = $start->diff($end);
         $hours = $interval->h + ($interval->i / 60);
 
         $extra_factor = 0.0;
+        $extra_labels = [];
 
-        $day_of_week = (int)$start_dt->format('w');
-        $is_sunday = ($day_of_week === 0);
-        if ($is_sunday) {
-            $extra_factor += 0.50; 
+        if ($start->format('N') == 7) {
+            $extra_factor += 0.50;
+            $extra_labels[] = "+50% Sunday";
         }
 
-        $time_string = $start_dt->format('H:i');
-        $is_night = ($time_string >= '18:00');
-        if ($is_night) {
+        if ($start->format('H:i') >= "18:00") {
             $extra_factor += 0.25;
+            $extra_labels[] = "+25% Night Shift";
         }
 
         $effective_rate = $hourly_rate * (1 + $extra_factor);
-        $shift_pay = $hours * $effective_rate;
-        $shift_pay_rounded = floor($shift_pay);
+        $total = $effective_rate * $hours;
 
-        $total_overtime_pay += $shift_pay_rounded;
-
-        $overtime_rows[] = [
-            'date'      => $date,
-            'hours'     => $hours,
-            'base_rate' => $hourly_rate,
-            'is_sunday' => $is_sunday,
-            'is_night'  => $is_night,
-            'total'     => $shift_pay_rounded,
+        $overtime_details[] = [
+            "date" => $date[$i],
+            "hours" => $hours,
+            "base_rate" => $hourly_rate,
+            "extra_labels" => $extra_labels,
+            "effective_rate" => $effective_rate,
+            "total" => $total
         ];
+
+        $total_overtime_payment += $total;
     }
-    $grand_total = $final_base_net + $total_overtime_pay;
 }
+
+// Grand total
+$grand_total_salary = $final_base_net + $total_overtime_payment;
+
+?>
