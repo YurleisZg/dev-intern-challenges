@@ -18,7 +18,7 @@
     </style>
 </head>
 <body>
-    <button onclick="history.back()">
+    <button onclick="window.location.href='../../../index.php'">
         ← Back
     </button>
 </body>
