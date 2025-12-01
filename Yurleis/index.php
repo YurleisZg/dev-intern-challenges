@@ -5,17 +5,17 @@ $projects = [
         [
             'title' => 'PHP Accountant',
             'description' => 'Salary calculator with overtime support',
-            'link' => 'php/challenges/accountant/accountant.php'
+            'link' => 'php/challenges/accountant/index.php'
         ],
         [
             'title' => 'Fruit Set',
             'description' => 'An interactive mini-game with two fruit baskets (Basket A and Basket B)',
             'link' => 'php/challenges/fruit_set/fruit_set.php'
         ],
-        [
-            'title' => 'Project 3',
-            'description' => 'Customer Insights',
-            'link' => 'project3.html'
+             [
+            'title' => 'The "Toggle" Time-Attack',
+            'description' => 'Game where you quickly switch elements on and off before time runs out',
+            'link' => 'php/challenges/toggle_time/start.php'
         ],
     ],
 
