@@ -1,0 +1,167 @@
+.game-container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 16px;
+}
+
+.title{
+    text-align: center;
+    margin-bottom: 24px;
+    color: #022432;
+}
+
+.description {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 1.2rem;
+    color: #0f0f10;
+} 
+
+.game-over {
+    color: #b91c1c;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.card {
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    background: #f3f4f6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.card-error {
+    border: 1px solid #f87171;
+}
+
+.card-success {
+    border: 1px solid #34d399;
+}
+
+.hud {
+    padding: 15px;
+    color: rgb(176, 5, 5);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    margin-left: 30px;
+    font-weight: bold;
+    color:#022432;
+}
+
+.row-label {
+    width: 96px;
+    font-size: 1.12rem;
+}
+
+
+.toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.toggle input {
+    display: none;
+}
+
+.toggle-ui {
+    width: 80px;
+    height: 60px;
+    border-radius: 8px;
+    background: #a2a2a2;
+    position: relative;
+}
+
+.toggle-ui::before {
+    content: "";
+    position: center;
+    width: 20px;
+    height: 18px;
+    border-radius: 9px;
+    background: #f9fafb;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s ease;
+}
+
+.toggle input:checked + .toggle-ui {
+    background: #02112a;
+}
+
+.toggle input:checked + .toggle-ui::before {
+    transform: translateX(20px);
+}
+
+.toggle-ui.disabled {
+    opacity: 0.7;
+}
+
+
+.btn {
+    display: inline-block;
+    padding: 15px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.btn-primary {
+    background: #022432;
+    color: #f8f8f8;
+    font-size: 1rem;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
+
+.btn-secondary {
+    background: #6b7280;
+    color: #f8f8f8;
+    font-size: 1rem;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    margin-left: 12px;
+}
+
+.mt {
+    margin-top: 12px;
+    margin-left: auto;
+}
+
+.footer-links {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.link {
+    color: #336c41;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
