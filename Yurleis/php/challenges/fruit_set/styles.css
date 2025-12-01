@@ -1,0 +1,281 @@
+/* ===========================
+   RESET BÁSICO
+   =========================== */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 16px 0 20px;
+    background: #f8fafc;
+    color: rgb(5, 28, 43);
+}
+
+/* ===========================
+   CABECERA
+   =========================== */
+.title {
+    text-align: center;
+    font-size: 30px;
+    color:rgb(5, 28, 43);
+    margin: 40px 20px 6px;
+}
+
+
+.description {
+    font-size: 15.5px;
+    color: #222426;
+    text-align: center;
+    margin: 0;
+    margin-bottom: 30px;
+}
+
+/* ===========================
+   CONTENEDOR DE FILAS
+   =========================== */
+.row {
+    max-width: 1100px;
+    margin: 0 auto 14px auto;
+    padding: 0 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 12px;
+}
+
+/* La segunda fila (Ops + Results) en una sola línea */
+.row:nth-of-type(2) {
+    grid-template-columns: 2fr 3fr;
+}
+
+/* ===========================
+   CARDS
+   =========================== */
+.card,
+.basket-card {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    padding: 10px 14px 12px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    position: relative;
+}
+
+/* Línea lateral de color en canastas y ops */
+.basket-card {
+    border-left: 4px solid #0ea5e9;
+}
+
+.row:nth-of-type(2) .card:first-child {
+    border-left: 4px solid #f97316;   /* Operations */
+}
+
+.row:nth-of-type(2) .card:last-child {
+    border-left: 4px solid #22c55e;   /* Results */
+}
+
+.card-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 2px 0 8px;
+    color: #0f172a;
+}
+
+/* Línea fina bajo el título */
+.card-title::after {
+    content: "";
+    display: block;
+    margin-top: 4px;
+    width: 40px;
+    height: 2px;
+    background: #e2e8f0;
+}
+
+/* ===========================
+   BASKETS
+   =========================== */
+
+/* Dos bloques verticales:
+   1) selección / botones
+   2) contenido actual
+*/
+.basket-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.basket-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.column-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #64748b;
+    margin-bottom: 4px;
+}
+
+/* Primera columna: checkboxes en horizontal */
+.basket-columns .basket-column:first-child {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.basket-columns .basket-column:first-child .column-title {
+    width: 100%;
+}
+
+/* Checkboxes */
+.checkbox-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 6px 2px 0;
+    font-size: 0.8rem;
+    color: #0f172a;
+}
+
+.checkbox-row input {
+    accent-color: #0f766e;
+}
+
+/* Botones Add basket / Add all, uno al lado del otro */
+.basket-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.basket-form,
+.basket-bulk-form {
+    margin: 0;
+}
+
+/* Contenido de la canasta: texto plano, separado por comas */
+.basket-list {
+    min-height: 52px;
+    padding: 7px 9px;
+    border-radius: 8px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    font-size: 0.82rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+}
+
+.basket-item {
+    padding-right: 4px;
+}
+
+.empty-text {
+    color: #9ca3af;
+    font-size: 0.8rem;
+}
+
+/* ===========================
+   BOTONES
+   =========================== */
+button {
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    background-color: #0d497d;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+
+/* Secundarios (Remove, Add all) */
+.secondary-btn {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+}
+
+.secondary-btn:hover {
+    background: #f8fafc;
+}
+
+/* Versión pequeña para Add all */
+.secondary-btn--sm {
+    font-size: 0.75rem;
+    padding: 4px 9px;
+}
+
+/* Form de limpiar */
+.clear-form {
+    margin-top: 4px;
+}
+
+/* ===========================
+   OPERATIONS
+   =========================== */
+.operations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.op-form {
+    margin: 0;
+}
+
+.op-form button {
+    width: 100%;
+    text-align: left;
+    background: #e5e7eb;
+    color: #020617;
+    border: 1px solid #cbd5e1;
+    font-size: 0.8rem;
+}
+
+/* ===========================
+   RESULTS
+   =========================== */
+.results-box {
+    margin-top: 6px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    font-size: 0.85rem;
+}
+
+.results-box p {
+    margin: 0 0 4px;
+}
+
+.results-box p + p {
+    margin-top: 3px;
+    color: #475569;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+@media (max-width: 900px) {
+    .row {
+        grid-template-columns: 1fr;
+    }
+    .row:nth-of-type(2) {
+        grid-template-columns: 1fr;
+    }
+    .title {
+        font-size: 20px;
+    }
+    .description {
+        font-size: 12px;
+        padding: 0 10px;
+    }
+}
