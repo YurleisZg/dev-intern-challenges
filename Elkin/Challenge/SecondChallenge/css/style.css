@@ -1,0 +1,18 @@
+:root{
+    --bg:#fafafa; --card:#fff; --border:#e4e4e4; --text:#2e2e2e;
+    --accent:#ececec; --accent-hover:#e0e0e0;
+}
+body{font-family:"Segoe UI",sans-serif;background:var(--bg);margin:0;color:var(--text);}
+header{padding:28px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;background:var(--card)}
+header h1{margin:0;font-size:1.4rem;font-weight:600}
+header a{border:1px solid var(--border);padding:6px 12px;border-radius:6px;text-decoration:none;color:var(--text);background:var(--accent)}
+header a:hover{background:var(--accent-hover)}
+.container{width:92%;max-width:1100px;margin:28px auto;display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.card{border:1px solid var(--border);background:var(--card);border-radius:8px;padding:18px}
+h2{margin-top:0}
+.fruit-list{min-height:42px;margin-bottom:12px;color:#444}
+.btn{display:inline-block;margin:6px 6px 6px 0;padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--accent);text-decoration:none;color:var(--text);font-size:0.9rem}
+.btn:hover{background:var(--accent-hover)}
+.panel{grid-column:span 2;border:1px solid var(--border);background:var(--card);padding:18px;border-radius:8px}
+.result{grid-column:span 2;border:1px solid var(--border);padding:18px;border-radius:8px;background:var(--card);margin-top:10px}
+.small{font-size:0.85rem;color:#666}

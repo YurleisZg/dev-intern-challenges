@@ -1,0 +1,265 @@
+/* Notion-like styling for the Pattern game */
+
+:root {
+    --bg: #fafafa;
+    --card: #ffffff;
+    --border: #e4e4e4;
+    --text: #2e2e2e;
+    --accent: #ececec;
+    --accent-hover: #e0e0e0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: #f7f6f3;
+    color: #2f3437;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0;
+    padding: 0 0 48px;
+}
+
+header {
+    padding: 20px 30px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+header h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+header a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--accent);
+    color: var(--text);
+    transition: background 0.2s;
+}
+
+header a:hover {
+    background: var(--accent-hover);
+}
+
+
+
+.game-container {
+    width: 100%;
+    max-width: 760px;
+    margin: 24px auto 0;
+    background: #fcfbf7;
+    border-radius: 12px;
+    border: 1px solid rgba(55, 53, 47, 0.12);
+    padding: 32px 32px 28px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 12px;
+    text-align: left;
+    color: #2f3437;
+}
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0 0 12px;
+}
+
+.description {
+    margin: 0 0 20px;
+    font-size: 0.98rem;
+    line-height: 1.6;
+    color: #6b6f76;
+}
+
+.game-over {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #d94848;
+    margin: 0 0 8px;
+}
+
+.card {
+    border-radius: 10px;
+    padding: 18px 18px 16px;
+    margin-bottom: 18px;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.card-error {
+    border-color: rgba(217, 72, 72, 0.35);
+    background: #fdf4f4;
+}
+
+.card-success {
+    border-color: rgba(34, 197, 94, 0.45);
+    background: #f0fdf4;
+}
+
+.hud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+    color: #373b3f;
+    background: #f3f2ee;
+    border: 1px solid rgba(55, 53, 47, 0.08);
+}
+
+.hud span strong {
+    font-weight: 600;
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    padding: 4px 0;
+    color: #2f3437;
+}
+
+.row-label {
+    width: 108px;
+    font-size: 0.96rem;
+    color: #6b6f76;
+}
+
+.toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.toggle input {
+    display: none;
+}
+
+.toggle-ui {
+    width: 46px;
+    height: 26px;
+    border-radius: 999px;
+    background: #d3d3d3;
+    position: relative;
+    transition: background 0.16s ease;
+}
+
+.toggle-ui::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #ffffff;
+    top: 4px;
+    left: 4px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18);
+    transition: transform 0.18s ease;
+}
+
+.toggle input:checked + .toggle-ui {
+    background: #4c6fff;
+}
+
+.toggle input:checked + .toggle-ui::before {
+    transform: translateX(18px);
+}
+
+.toggle-ui.disabled {
+    opacity: 0.45;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 6px;
+    text-decoration: none;
+    border: 1px solid rgba(55, 53, 47, 0.16);
+    cursor: pointer;
+    font-size: 0.95rem;
+    background: #ffffff;
+    color: #2f3437;
+    transition: background 0.12s ease, box-shadow 0.12s ease, transform 0.05s ease;
+}
+
+.btn-primary {
+    background: #4c6fff;
+    color: #ffffff;
+    border-color: #4c6fff;
+}
+
+.btn:hover {
+    background: #f3f2ee;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.btn-primary:hover {
+    background: #3b5bff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.16);
+}
+
+.btn:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.mt {
+    margin-top: 12px;
+    margin-left: auto;
+}
+
+ .footer-links {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.link {
+    color: #4c6fff;
+    text-decoration: none;
+    font-size: 0.92rem;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+

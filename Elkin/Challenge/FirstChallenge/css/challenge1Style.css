@@ -1,0 +1,172 @@
+:root {
+    color-scheme: light;
+}
+
+.page-description {
+    margin: 0 0 25px 0;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.summary-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.summary-card h3 {
+    margin: 0 0 15px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.summary-item {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    background: var(--bg);
+}
+
+.summary-label {
+    font-size: 0.8rem;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.summary-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 6px;
+    color: var(--text);
+}
+
+.overtime-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.overtime-entry {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    background: var(--bg);
+}
+
+.overtime-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    gap: 10px;
+}
+
+.overtime-date {
+    font-weight: 600;
+}
+
+.overtime-time {
+    font-size: 0.85rem;
+    color: #777;
+    margin-left: 4px;
+}
+
+.overtime-calculation {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-sunday {
+    background: #fff4d5;
+    color: #b87300;
+}
+
+.badge-night {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.total-highlight {
+    background: var(--text);
+    color: var(--card);
+    border-radius: 8px;
+    padding: 18px;
+    text-align: center;
+}
+
+.total-highlight .total-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.total-highlight .total-subtext {
+    margin-top: 6px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.breakdown-grid {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.breakdown-item {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+}
+
+.breakdown-item-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.8;
+}
+
+.breakdown-item-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.empty-state.small {
+    padding: 20px;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .summary-card {
+        padding: 16px;
+    }
+
+    .total-highlight .total-value {
+        font-size: 1.6rem;
+    }
+}
+
+
