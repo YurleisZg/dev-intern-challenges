@@ -1,0 +1,196 @@
+.summary-container {
+    font-family: "Segoe UI", sans-serif;
+    color: #2e2e2e;
+}
+
+.summary-header {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #2e2e2e;
+}
+
+.calculation-section {
+    background: #fafafa;
+    border: 1px solid #e4e4e4;
+    border-radius: 4px;
+    padding: 8px;
+    margin-bottom: 6px;
+}
+
+.section-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    color: #2e2e2e;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.section-icon {
+    font-size: 0.95rem;
+}
+
+.calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px 0;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.calc-row:last-child {
+    border-bottom: none;
+}
+
+.calc-label {
+    font-size: 0.8rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.calc-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #2e2e2e;
+}
+
+.calc-formula {
+    font-size: 0.7rem;
+    color: #999;
+    font-family: "Courier New", monospace;
+    margin-top: 2px;
+}
+
+.deduction {
+    color: #c33;
+}
+
+.addition {
+    color: #2a7f3f;
+}
+
+.subtotal-row {
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 3px;
+    padding: 6px 8px;
+    margin-top: 4px;
+}
+
+.subtotal-row .calc-label {
+    font-weight: 600;
+    color: #2e2e2e;
+}
+
+.overtime-entry {
+    background: #fff;
+    border: 1px solid #e4e4e4;
+    border-radius: 3px;
+    padding: 6px;
+    margin-bottom: 5px;
+}
+
+.overtime-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.overtime-date {
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.overtime-time {
+    font-size: 0.75rem;
+    color: #666;
+}
+
+.overtime-calculation {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 3px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.badge-sunday {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.badge-night {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.badge-both {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.total-section {
+    background: #2e2e2e;
+    color: #fff;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.total-label {
+    font-size: 0.8rem;
+    margin-bottom: 3px;
+    opacity: 0.9;
+}
+
+.total-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.breakdown-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    padding: 6px;
+    text-align: center;
+}
+
+.breakdown-item-label {
+    font-size: 0.7rem;
+    opacity: 0.8;
+    margin-bottom: 2px;
+}
+
+.breakdown-item-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.no-overtime {
+    text-align: center;
+    padding: 8px;
+    color: #999;
+    font-style: italic;
+}
