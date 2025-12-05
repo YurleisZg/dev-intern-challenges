@@ -18,6 +18,7 @@ if (!empty($_POST)) {
     $stmt->execute([$title, $description, $state, $due_date, $priority]);
     // Output message
     $msg = 'Created Successfully!';
+
 }
 ?>
 <?=template_header('Create')?>
@@ -57,7 +58,7 @@ if (!empty($_POST)) {
 
         <div class="form-group">
             <label for="due_date">Due Date</label>
-            <input type="date" name="due_date" id="due_date" required>
+            <input type="date" name="due_date" id="due_date">
         </div>
 
         <div class="form-group">
@@ -67,6 +68,7 @@ if (!empty($_POST)) {
 
     <?php if ($msg): ?>
         <p><?=$msg?></p>
+        <meta http-equiv="refresh" content="1;url=index.php">
     <?php endif; ?>
 </div>
 
