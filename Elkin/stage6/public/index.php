@@ -23,17 +23,11 @@ $todos = read($db_conn, $start, $records_per_page);
 <?= template_header('Tasks') ?>
 
 <div class="content read">
-
-    <header class="page-header">
-        <h2>Tasks</h2>
-        <a href="./create.php" class="create-contact">+ Add Task</a>
-    </header>
-
+    <a href="create.php" class="create-contact">Create Task</a>
     <!-- TABLE -->
     <table class="task-table">
         <thead>
         <tr>
-            <th>#</th>
             <th>Title</th>
             <th>Description</th>
             <th>Status</th>
@@ -46,7 +40,6 @@ $todos = read($db_conn, $start, $records_per_page);
         <tbody>
         <?php foreach ($todos as $todo): ?>
             <tr>
-                <td><?= $todo['id'] ?></td>
                 <td><?= $todo['title'] ?></td>
                 <td><?= $todo['description'] ?></td>
 

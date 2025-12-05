@@ -18,12 +18,12 @@ if(isset($_GET['id'])){
         $stmt->execute([$title, $description, $state, $due_date, $priority, $_GET['id']]);
         $msg = 'Updated Successfully!';
     }
-    // Get the contact from the contacts table
+    // Get the task from the To Do table
     $stmt = $pdo->prepare('SELECT * FROM todos WHERE id = ?');
     $stmt->execute([$_GET['id']]);
     $todo = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$todo) {
-        exit('Contact doesn\'t exist with that ID!');
+        exit('Task doesn\'t exist with that ID!');
     }
 }else {
     exit('No ID specified!');
@@ -67,7 +67,7 @@ if(isset($_GET['id'])){
 
         <div class="form-group">
             <label for="due_date">Due Date</label>
-            <input type="date" name="due_date" id="due_date" value="<?=$todo['due_date']?>" required>
+            <input type="date" name="due_date" id="due_date" value="<?=$todo['due_date']?>">
         </div>
 
         <div class="form-group">
@@ -77,6 +77,7 @@ if(isset($_GET['id'])){
 
     <?php if ($msg): ?>
         <p><?=$msg?></p>
+        <meta http-equiv="refresh" content="1;url=index.php">
     <?php endif; ?>
 </div>
 
