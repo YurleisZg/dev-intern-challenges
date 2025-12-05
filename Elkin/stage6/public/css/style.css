@@ -75,7 +75,7 @@ body {
 .content h2 {
     margin: 0;
     padding: 48px 0 12px 0;
-    font-size: 36px;
+    font-size: 30px;
     font-weight: 700;
     border: none;
     color: #37352f;
@@ -550,3 +550,43 @@ body {
     color: #1c8c55;
     border: 1px solid rgba(46, 204, 113, 0.35);
 }
+
+/* FORMULARIO EN DOS COLUMNAS ARMONIZADO */
+.content.update form {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 28px;
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto; /* centrar */
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+/* Estilo uniforme */
+.todo-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Campos en 2 columnas */
+#title,
+#description {
+    grid-column: span 2; /* Title y Description ocupan ancho completo */
+}
+
+/* Due Date alineado a la izquierda */
+#due_date {
+    grid-column: span 1;
+}
+
+/* Botón ocupa ancho completo */
+.todo-form .form-group:last-child {
+    grid-column: span 2;
+}
+
+
+
+
+
