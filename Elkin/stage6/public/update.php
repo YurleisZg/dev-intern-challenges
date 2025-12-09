@@ -3,6 +3,7 @@ session_start();
 
 include '../config/DatabaseConn.php';
 include '../includes/templates.php';
+require_once __DIR__ . '/../includes/models.php';
 require_once __DIR__ . '/../config/path.php';
 $css_path = PUBLIC_CSS;
 $db_conn = DatabaseConn::getInstance();
@@ -29,17 +30,21 @@ if(isset($_GET['id'])){
         $due_date = $_POST['due_date'] ?? '';
         $priority = $_POST['priority'] ?? '';
 
-        $stmt = $pdo->prepare('UPDATE todos SET  title = ?, description = ?, state = ?, due_date = ?, priority = ? WHERE id = ? AND user_id = ?');
-        $stmt->execute([$title, $description, $state, $due_date, $priority, $_GET['id'], $userId]);
-        if ($stmt->rowCount() === 0) {
+        $updated = Task::updateForUser((int)$_GET['id'], (int)$userId, [
+            'title' => $title,
+            'description' => $description,
+            'state' => $state,
+            'due_date' => $due_date,
+            'priority' => $priority,
+        ]);
+
+        if (!$updated) {
             exit('Task not found or you do not have permission to update it.');
         }
         $msg = 'Updated Successfully!';
     }
     // Get the task from the To Do table
-    $stmt = $pdo->prepare('SELECT * FROM todos WHERE id = ? AND user_id = ?');
-    $stmt->execute([$_GET['id'], $userId]);
-    $todo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $todo = Task::findByIdForUser((int)$_GET['id'], (int)$userId);
     if (!$todo) {
         exit('Task doesn\'t exist with that ID!');
     }

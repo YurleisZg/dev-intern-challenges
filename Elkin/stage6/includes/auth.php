@@ -1,31 +1,15 @@
 <?php
 require_once __DIR__ . '/../config/DatabaseConn.php';
+require_once __DIR__ . '/models.php';
 
 function registerUser($username, $email, $password) {
-    $db = DatabaseConn::getInstance()->getConnection();
-
-    $stmt = $db->prepare("SELECT user_id FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    if ($stmt->fetch()) {
-        return ["success" => false, "message" => "The email is already registered."];
-    }
-
-    $hashed = password_hash($password, PASSWORD_DEFAULT);
-
-    $stmt = $db->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-    $stmt->execute([$username, $email, $hashed]);
-
-    return ["success" => true];
+    return User::create($username, $email, $password);
 }
 
 function loginUser($email, $password) {
-    $db = DatabaseConn::getInstance()->getConnection();
+    $user = User::verifyCredentials($email, $password);
 
-    $stmt = $db->prepare("SELECT user_id, password FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$user || !password_verify($password, $user['password'])) {
+    if (!$user) {
         return ["success" => false, "message" => "Invalid Credentials"];
     }
 

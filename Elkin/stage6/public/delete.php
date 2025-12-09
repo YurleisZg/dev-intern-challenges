@@ -3,6 +3,7 @@ session_start();
 
 include '../config/DatabaseConn.php';
 include '../includes/templates.php';
+require_once __DIR__ . '/../includes/models.php';
 require_once __DIR__ . '/../config/path.php';
 $css_path = PUBLIC_CSS;
 $db_conn = DatabaseConn::getInstance();
@@ -21,9 +22,7 @@ if ($userId === null) {
 }
 
 if (isset($_GET['id'])) {
-    $stmt = $pdo->prepare('SELECT * FROM todos WHERE id = ? AND user_id = ?');
-    $stmt->execute([$_GET['id'], $userId]);
-    $todo = $stmt->fetch(PDO::FETCH_ASSOC);
+    $todo = Task::findByIdForUser((int)$_GET['id'], (int)$userId);
 
     if (!$todo) {
         exit('Task doesn\'t exist with that ID!');
@@ -32,8 +31,7 @@ if (isset($_GET['id'])) {
     // Confirmación antes de borrar
     if (isset($_GET['confirm'])) {
         if ($_GET['confirm'] == 'yes') {
-            $stmt = $pdo->prepare('DELETE FROM todos WHERE id = ? AND user_id = ?');
-            $stmt->execute([$_GET['id'], $userId]);
+            Task::deleteForUser((int)$_GET['id'], (int)$userId);
             $msg = 'You have deleted the task!';
         } else {
             sleep(1);

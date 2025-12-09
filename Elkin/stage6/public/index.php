@@ -4,6 +4,7 @@ session_start();
 include '../config/DatabaseConn.php';
 include '../includes/templates.php';
 include '../includes/functions.php';
+require_once __DIR__ . '/../includes/models.php';
 require_once __DIR__ . '/../config/path.php';
 
 $css_path = PUBLIC_CSS;
@@ -28,15 +29,13 @@ if ($userId === null) {
     exit;
 }
 
-$stmt = $db_conn->getConnection()->prepare("SELECT COUNT(*) FROM todos WHERE user_id = ?");
-$stmt->execute([$userId]);
-$total_todos = (int)$stmt->fetchColumn();
+$total_todos = Task::countByUser((int)$userId);
 
 // Offset
 $start = ($page - 1) * $records_per_page;
 
 
-$todos = read($db_conn, $userId, $start, $records_per_page);
+$todos = Task::listByUser((int)$userId, $start, $records_per_page);
 
 ?>
 

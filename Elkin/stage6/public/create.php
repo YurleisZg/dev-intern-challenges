@@ -3,6 +3,7 @@ session_start();
 
 include '../config/DatabaseConn.php';
 include '../includes/templates.php';
+require_once __DIR__ . '/../includes/models.php';
 require_once __DIR__ . '/../config/path.php';
 $db_conn = DatabaseConn::getInstance();
 $pdo = $db_conn->getConnection();
@@ -27,10 +28,8 @@ if (!empty($_POST)) {
     $state = $_POST['state'] ?? '';
     $due_date = $_POST['due_date'] ?? '';
     $priority = $_POST['priority'] ?? '';
-    // Insert new record into the contacts table
-    $stmt = $pdo->prepare('INSERT INTO todos (user_id, title, description, state, due_date, priority)
-    VALUES (?, ?, ?, ?, ?, ?)');
-    $stmt->execute([$userId, $title, $description, $state, $due_date, $priority]);
+
+    Task::create((int)$userId, $title, $description, $state, $due_date, $priority);
     // Output message
     $msg = 'Created Successfully!';
 

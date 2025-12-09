@@ -1,13 +1,9 @@
 <?php
-function read($db_conn, $userId, $start = 0, $limit = 5) {
-    $pdo = $db_conn->getConnection();
-    $stmt = $pdo->prepare("SELECT * FROM todos WHERE user_id = :user_id ORDER BY id ASC LIMIT :start, :limit");
-    $stmt->bindValue(':user_id', (int)$userId, PDO::PARAM_INT);
-    $stmt->bindValue(':start', (int)$start, PDO::PARAM_INT);
-    $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
-    $stmt->execute();
+require_once __DIR__ . '/models.php';
 
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+function read($db_conn, $userId, $start = 0, $limit = 5) {
+    // Wrapper para compatibilidad con el código existente
+    return Task::listByUser((int)$userId, (int)$start, (int)$limit);
 }
 
 function register( $name) {

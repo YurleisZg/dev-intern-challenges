@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 
     <div class="auth-footer">
-        ¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a>
+        Do you already have an account? <a href="login.php">Log In</a>
     </div>
 </div>
 
