@@ -5,7 +5,9 @@ function template_header($title,$css_path) {
         session_start();
     }
     $base = BASE_URL;
+    $challengeUrl = CHALLENGE_URL;
     $isAuth = isset($_SESSION['isAuth']) && $_SESSION['isAuth'] === true;
+    
     echo <<<EOT
 <!DOCTYPE html>
 <html>
@@ -19,6 +21,7 @@ function template_header($title,$css_path) {
     <nav class="navtop">
     	<div>
     		<h1>PHP To Do</h1>
+    		<a href="$challengeUrl"><i class="fas fa-home"></i>Dashboard</a>
             <a href="$base/public/index.php"><i class="fas fa-home"></i>Home</a>
 EOT;
     if ($isAuth) {
