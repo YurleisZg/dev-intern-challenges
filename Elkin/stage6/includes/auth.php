@@ -7,7 +7,7 @@ function registerUser($username, $email, $password) {
     $stmt = $db->prepare("SELECT user_id FROM users WHERE email = ?");
     $stmt->execute([$email]);
     if ($stmt->fetch()) {
-        return ["success" => false, "message" => "El correo ya está registrado"];
+        return ["success" => false, "message" => "The email is already registered."];
     }
 
     $hashed = password_hash($password, PASSWORD_DEFAULT);
@@ -26,7 +26,7 @@ function loginUser($email, $password) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user || !password_verify($password, $user['password'])) {
-        return ["success" => false, "message" => "Credenciales incorrectas"];
+        return ["success" => false, "message" => "Invalid Credentials"];
     }
 
     if (session_status() !== PHP_SESSION_ACTIVE) {
