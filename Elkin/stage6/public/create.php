@@ -1,9 +1,24 @@
 <?php
+session_start();
+
 include '../config/DatabaseConn.php';
 include '../includes/templates.php';
+require_once __DIR__ . '/../config/path.php';
 $db_conn = DatabaseConn::getInstance();
 $pdo = $db_conn->getConnection();
 $msg = '';
+$css_path = PUBLIC_CSS;
+
+if (!isset($_SESSION['isAuth']) || $_SESSION['isAuth'] !== true) {
+    header('Location: ./login/login.php');
+    exit;
+}
+
+$userId = $_SESSION['user_id'] ?? null;
+if ($userId === null) {
+    header('Location: ./login/login.php');
+    exit;
+}
 // Check if POST data is not empty
 if (!empty($_POST)) {
 
@@ -13,15 +28,15 @@ if (!empty($_POST)) {
     $due_date = $_POST['due_date'] ?? '';
     $priority = $_POST['priority'] ?? '';
     // Insert new record into the contacts table
-    $stmt = $pdo->prepare('INSERT INTO todos (title, description, state, due_date, priority)
-    VALUES (?, ?, ?, ?, ?)');
-    $stmt->execute([$title, $description, $state, $due_date, $priority]);
+    $stmt = $pdo->prepare('INSERT INTO todos (user_id, title, description, state, due_date, priority)
+    VALUES (?, ?, ?, ?, ?, ?)');
+    $stmt->execute([$userId, $title, $description, $state, $due_date, $priority]);
     // Output message
     $msg = 'Created Successfully!';
 
 }
 ?>
-<?=template_header('Create')?>
+<?=template_header('Create', $css_path)?>
 
 <div class="content update">
     <h2>Create Task</h2>

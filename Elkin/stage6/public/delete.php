@@ -1,14 +1,28 @@
 <?php
+session_start();
+
 include '../config/DatabaseConn.php';
 include '../includes/templates.php';
-
+require_once __DIR__ . '/../config/path.php';
+$css_path = PUBLIC_CSS;
 $db_conn = DatabaseConn::getInstance();
 $pdo = $db_conn->getConnection();
 $msg = '';
 
+if (!isset($_SESSION['isAuth']) || $_SESSION['isAuth'] !== true) {
+    header('Location: ./login/login.php');
+    exit;
+}
+
+$userId = $_SESSION['user_id'] ?? null;
+if ($userId === null) {
+    header('Location: ./login/login.php');
+    exit;
+}
+
 if (isset($_GET['id'])) {
-    $stmt = $pdo->prepare('SELECT * FROM todos WHERE id = ?');
-    $stmt->execute([$_GET['id']]);
+    $stmt = $pdo->prepare('SELECT * FROM todos WHERE id = ? AND user_id = ?');
+    $stmt->execute([$_GET['id'], $userId]);
     $todo = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$todo) {
@@ -18,8 +32,8 @@ if (isset($_GET['id'])) {
     // Confirmación antes de borrar
     if (isset($_GET['confirm'])) {
         if ($_GET['confirm'] == 'yes') {
-            $stmt = $pdo->prepare('DELETE FROM todos WHERE id = ?');
-            $stmt->execute([$_GET['id']]);
+            $stmt = $pdo->prepare('DELETE FROM todos WHERE id = ? AND user_id = ?');
+            $stmt->execute([$_GET['id'], $userId]);
             $msg = 'You have deleted the task!';
         } else {
             sleep(1);
@@ -30,7 +44,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 
-<?=template_header('Delete')?>
+<?=template_header('Delete', $css_path)?>
 
 <div class="content delete">
     <h2>Delete Task #<?=$todo['id']?></h2>
