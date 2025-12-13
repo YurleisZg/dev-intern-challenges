@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 }
 
-// Cargar registro seleccionado para edición si aplica
+// Load selected record for editing if applicable
 $currentRecord = $currentRecordId ? SalaryRecord::findWithDetails($currentRecordId, $userId) : null;
 
 // Ajustar cantidad de filas cuando se edita un registro guardado
@@ -69,7 +69,7 @@ if (empty($_POST) && $currentRecord && isset($currentRecord['details'])) {
 	$overtimeRows = $detailsCount;
 }
 
-// Preparar datos para rellenar el formulario
+// Prepare data to fill out the form
 $formData = [
 	'gross_salary' => '',
 	'overtime_date' => array_fill(0, $overtimeRows, ''),
@@ -93,7 +93,7 @@ if (!empty($postedOvertime)) {
 	}
 }
 
-// Resultado desde URL directa (sin POST) usando datos guardados
+// Result from direct URL (without POST) using saved data
 if (!$result && $currentRecord && isset($currentRecord['details'])) {
 	$result = computeSalaryResult((float) $currentRecord['gross_salary_input'], $currentRecord['details']);
 }

@@ -1,6 +1,6 @@
 <?php
 
-// Función para calcular impuestos
+
 function calculateTax($grossSalary) {
     if ($grossSalary < 1000) {
         return 0;
@@ -11,17 +11,17 @@ function calculateTax($grossSalary) {
     return $grossSalary * 0.20;
 }
 
-// Función para calcular descuento de salud
+// Function to calcula health tax
 function calculateHealth($grossSalary) {
     return $grossSalary * 0.05;
 }
 
-// Función para generar bono aleatorio
+// Ramdom bonus
 function generateBonus() {
     return rand(100, 500);
 }
 
-// Función para calcular tarifa por hora
+
 function calculateHourlyRate($monthlySalary) {
     return $monthlySalary / 160;
 }
@@ -31,7 +31,7 @@ function isSunday($date) {
     return date('w', strtotime($date)) == 0;
 }
 
-// Función para verificar si es turno nocturno (después de 6:00 PM)
+
 function isNightShift($startTime, $endTime) {
     $nightStart = strtotime('18:00');
     $start = strtotime($startTime);
@@ -44,7 +44,7 @@ function isNightShift($startTime, $endTime) {
     return $start >= $nightStart || $end > $nightStart;
 }
 
-// Función para calcular horas trabajadas
+
 function calculateHours($startTime, $endTime) {
     $start = strtotime($startTime);
     $end = strtotime($endTime);
@@ -57,10 +57,7 @@ function calculateHours($startTime, $endTime) {
     return $diff / 3600;
 }
 
-/**
- * Calcula los valores finales de un salario dado el sueldo base y un conjunto de turnos extra.
- * $overtimeRecords debe ser un arreglo de arrays con las llaves: date, start, end.
- */
+
 function computeSalaryResult(float $grossSalary, array $overtimeRecords): array {
     $tax = calculateTax($grossSalary);
     $health = calculateHealth($grossSalary);
