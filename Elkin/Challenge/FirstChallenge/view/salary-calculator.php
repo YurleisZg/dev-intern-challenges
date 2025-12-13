@@ -103,4 +103,4 @@ $savedRecords = SalaryRecord::listByUser($userId);
 
 // Render
 $overtimeRows = (int) $overtimeRows;
-require __DIR__ . '/view.php';
+require __DIR__ . '/salary-form.php';

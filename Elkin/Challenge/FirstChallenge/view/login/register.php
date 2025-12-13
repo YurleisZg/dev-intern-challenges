@@ -1,6 +1,6 @@
 <?php
 require_once '../../controllers/auth.php';
-include '../templates.php';
+include '../html-templates.php';
 require_once __DIR__ . '/../../config/path.php';
 $css_path = AUTH_CSS;
 $error = "";

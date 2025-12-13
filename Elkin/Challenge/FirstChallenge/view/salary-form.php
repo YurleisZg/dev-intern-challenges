@@ -55,7 +55,7 @@ $editing = isset($currentRecordId) && $currentRecordId !== null;
                                 <div class="record-date"><?php echo htmlspecialchars($record['updated_at']); ?></div>
                             </div>
                             <div class="record-actions">
-                                <a class="btn-link" href="challenge1.php?record_id=<?php echo (int) $record['record_id']; ?>">Edit</a>
+                                <a class="btn-link" href="salary-calculator.php?record_id=<?php echo (int) $record['record_id']; ?>">Edit</a>
                                 <form method="POST" onsubmit="return confirm('Delete this record?');">
                                     <input type="hidden" name="delete_record" value="<?php echo (int) $record['record_id']; ?>">
                                     <button type="submit" class="btn-link btn-danger">Delete</button>
@@ -76,7 +76,7 @@ $editing = isset($currentRecordId) && $currentRecordId !== null;
         <?php if ($editing): ?>
             <div class="editing-banner">
                 Editing the record #<?php echo (int) $currentRecordId; ?>
-                <a href="challenge1.php" class="link-reset">Create new</a>
+                <a href="salary-calculator.php" class="link-reset">Create new</a>
             </div>
         <?php endif; ?>
 
