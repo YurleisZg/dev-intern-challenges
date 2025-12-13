@@ -21,7 +21,7 @@ function template_header($title,$css_path) {
     <nav class="navtop">
     	<div>
     		<h1>PHP To Do</h1>
-    		<a href="$challengeUrl"><i class="fas fa-home"></i>Dashboard</a>
+    		<a href="$challengeUrl"><i class="fas fa-graduation-cap"></i>Dashboard</a>
             <a href="$base/public/index.php"><i class="fas fa-home"></i>Home</a>
 EOT;
     if ($isAuth) {

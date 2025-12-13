@@ -6,9 +6,6 @@ function read($db_conn, $userId, $start = 0, $limit = 5) {
     return Task::listByUser((int)$userId, (int)$start, (int)$limit);
 }
 
-function register( $name) {
-    var_dump($name);
-}
 function getStatusClass($state) {
     return match(strtolower($state)) {
         'todo' => 'status-pending',
