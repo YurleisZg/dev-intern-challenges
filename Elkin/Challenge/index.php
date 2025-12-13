@@ -99,7 +99,7 @@
 
         <div class="exercise">
             <span class="exercise-title">Challenge 1 — Salary Calculator</span>
-            <a href="FirstChallenge/challenge1.php">Open</a>
+            <a href="FirstChallenge/view/challenge1.php">Open</a>
         </div>
         <div class="exercise">
             <span class="exercise-title">Challenge 2 — The fruit set logic</span>
@@ -117,7 +117,7 @@
         <h2>Stage 6 to 9</h2>
         <div class="exercise">
             <span class="exercise-title">To Do List </span>
-            <a href="/Elkin/stage6/public/index.php">Open</a>
+            <a href="/dev-intern-challenges/Elkin/stage6/public/index.php">Open</a>
         </div>
     </section>
 
