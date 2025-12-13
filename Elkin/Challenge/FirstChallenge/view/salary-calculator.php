@@ -3,7 +3,7 @@ session_start();
 
 require_once '../config/DatabaseConn.php';
 require_once '../models/SalaryRecordModel.php';
-require_once '../utils.php';
+require_once '../includes/functions.php';
 
 if (!isset($_SESSION['isAuth']) || $_SESSION['isAuth'] !== true) {
 	header('Location: ./login/login.php');
