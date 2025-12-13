@@ -1,6 +1,6 @@
 <?php
 
-// Función para calcular impuestos
+
 function calculateTax($grossSalary) {
     if ($grossSalary < 1000) {
         return 0;
@@ -11,17 +11,17 @@ function calculateTax($grossSalary) {
     return $grossSalary * 0.20;
 }
 
-// Función para calcular descuento de salud
+// Function to calcula health tax
 function calculateHealth($grossSalary) {
     return $grossSalary * 0.05;
 }
 
-// Función para generar bono aleatorio
+// Ramdom bonus
 function generateBonus() {
     return rand(100, 500);
 }
 
-// Función para calcular tarifa por hora
+
 function calculateHourlyRate($monthlySalary) {
     return $monthlySalary / 160;
 }
@@ -31,7 +31,7 @@ function isSunday($date) {
     return date('w', strtotime($date)) == 0;
 }
 
-// Función para verificar si es turno nocturno (después de 6:00 PM)
+
 function isNightShift($startTime, $endTime) {
     $nightStart = strtotime('18:00');
     $start = strtotime($startTime);
@@ -44,7 +44,7 @@ function isNightShift($startTime, $endTime) {
     return $start >= $nightStart || $end > $nightStart;
 }
 
-// Función para calcular horas trabajadas
+
 function calculateHours($startTime, $endTime) {
     $start = strtotime($startTime);
     $end = strtotime($endTime);
@@ -55,6 +55,71 @@ function calculateHours($startTime, $endTime) {
 
     $diff = $end - $start;
     return $diff / 3600;
+}
+
+
+function computeSalaryResult(float $grossSalary, array $overtimeRecords): array {
+    $tax = calculateTax($grossSalary);
+    $health = calculateHealth($grossSalary);
+    $bonus = generateBonus();
+    $baseSalary = $grossSalary - $tax - $health + $bonus;
+
+    $hourlyRate = calculateHourlyRate($grossSalary);
+
+    $overtimeData = [];
+    $totalOvertime = 0;
+
+    foreach ($overtimeRecords as $record) {
+        $date = $record['date'] ?? null;
+        $startTime = $record['start'] ?? null;
+        $endTime = $record['end'] ?? null;
+
+        if (empty($date) || empty($startTime) || empty($endTime)) {
+            continue;
+        }
+
+        $hours = calculateHours($startTime, $endTime);
+        $baseRate = $hourlyRate;
+        $sundayBonus = 0;
+        $nightBonus = 0;
+
+        if (isSunday($date)) {
+            $sundayBonus = $hourlyRate * 0.50;
+        }
+
+        if (isNightShift($startTime, $endTime)) {
+            $nightBonus = $hourlyRate * 0.25;
+        }
+
+        $totalRate = $baseRate + $sundayBonus + $nightBonus;
+        $shiftTotal = $hours * $totalRate;
+
+        $overtimeData[] = [
+            'date' => $date,
+            'start' => $startTime,
+            'end' => $endTime,
+            'hours' => $hours,
+            'base_rate' => $baseRate,
+            'sunday_bonus' => $sundayBonus,
+            'night_bonus' => $nightBonus,
+            'total_rate' => $totalRate,
+            'shift_total' => $shiftTotal
+        ];
+
+        $totalOvertime += $shiftTotal;
+    }
+
+    return [
+        'gross_salary' => $grossSalary,
+        'tax' => $tax,
+        'health' => $health,
+        'bonus' => $bonus,
+        'base_salary' => $baseSalary,
+        'hourly_rate' => $hourlyRate,
+        'overtime_data' => $overtimeData,
+        'total_overtime' => $totalOvertime,
+        'grand_total' => $baseSalary + $totalOvertime
+    ];
 }
 
 
@@ -107,68 +172,18 @@ function processSalaryForm($overtimeRows) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate'])) {
         $grossSalary = (float) ($_POST['gross_salary'] ?? 0);
 
-        $tax = calculateTax($grossSalary);
-        $health = calculateHealth($grossSalary);
-        $bonus = generateBonus();
-        $baseSalary = $grossSalary - $tax - $health + $bonus;
-
-        $hourlyRate = calculateHourlyRate($grossSalary);
-
-        $overtimeData = [];
-        $totalOvertime = 0;
-
+        $overtimeRecords = [];
         if (isset($_POST['overtime_date']) && is_array($_POST['overtime_date'])) {
             foreach ($_POST['overtime_date'] as $index => $date) {
-                $startTime = $_POST['overtime_start'][$index] ?? null;
-                $endTime = $_POST['overtime_end'][$index] ?? null;
-
-                if (empty($date) || empty($startTime) || empty($endTime)) {
-                    continue;
-                }
-
-                $hours = calculateHours($startTime, $endTime);
-                $baseRate = $hourlyRate;
-                $sundayBonus = 0;
-                $nightBonus = 0;
-
-                if (isSunday($date)) {
-                    $sundayBonus = $hourlyRate * 0.50;
-                }
-
-                if (isNightShift($startTime, $endTime)) {
-                    $nightBonus = $hourlyRate * 0.25;
-                }
-
-                $totalRate = $baseRate + $sundayBonus + $nightBonus;
-                $shiftTotal = $hours * $totalRate;
-
-                $overtimeData[] = [
+                $overtimeRecords[] = [
                     'date' => $date,
-                    'start' => $startTime,
-                    'end' => $endTime,
-                    'hours' => $hours,
-                    'base_rate' => $baseRate,
-                    'sunday_bonus' => $sundayBonus,
-                    'night_bonus' => $nightBonus,
-                    'total_rate' => $totalRate,
-                    'shift_total' => $shiftTotal
+                    'start' => $_POST['overtime_start'][$index] ?? null,
+                    'end' => $_POST['overtime_end'][$index] ?? null,
                 ];
-
-                $totalOvertime += $shiftTotal;
             }
         }
 
-        $result = [
-            'gross_salary' => $grossSalary,
-            'tax' => $tax,
-            'health' => $health,
-            'bonus' => $bonus,
-            'base_salary' => $baseSalary,
-            'hourly_rate' => $hourlyRate,
-            'overtime_data' => $overtimeData,
-            'total_overtime' => $totalOvertime,
-            'grand_total' => $baseSalary + $totalOvertime
-        ];
+        $result = computeSalaryResult($grossSalary, $overtimeRecords);
     }
 
     $formData = [

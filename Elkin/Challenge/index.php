@@ -95,11 +95,11 @@
 
     
     <section class="week">
-        <h2>Week 1</h2>
+        <h2>Stage 0 to 5</h2>
 
         <div class="exercise">
             <span class="exercise-title">Challenge 1 — Salary Calculator</span>
-            <a href="FirstChallenge/challenge1.php">Open</a>
+            <a href="FirstChallenge/view/challenge1.php">Open</a>
         </div>
         <div class="exercise">
             <span class="exercise-title">Challenge 2 — The fruit set logic</span>
@@ -112,12 +112,12 @@
 
     </section>
 
-    <!-- WEEK 2 -->
+
     <section class="week">
-        <h2>Week 2</h2>
+        <h2>Stage 6 to 9</h2>
         <div class="exercise">
-            <span class="exercise-title">Coming soon...</span>
-            <a href="#">Pending</a>
+            <span class="exercise-title">To Do List </span>
+            <a href="/dev-intern-challenges/Elkin/stage6/public/index.php">Open</a>
         </div>
     </section>
 

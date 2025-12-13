@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/path.php';
-function template_header($title,$css_path) {
+function template_header($title,$css_path, $css_path1='') {
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();
     }
@@ -16,17 +16,17 @@ function template_header($title,$css_path) {
 		<title>$title</title>
 		<link rel="stylesheet" href="$base/$css_path">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+		<link rel="stylesheet" href="$base/$css_path1">
 	</head>
 	<body>
     <nav class="navtop">
     	<div>
-    		<h1>PHP To Do</h1>
+    		<h1>Challenge 1 - Salary Calculator</h1>
     		<a href="$challengeUrl"><i class="fas fa-graduation-cap"></i>Dashboard</a>
-            <a href="$base/public/index.php"><i class="fas fa-home"></i>Home</a>
 EOT;
     if ($isAuth) {
         echo <<<EOT
-            <a href="{$base}public/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
+            <a href="{$base}view/login/logout.php"><i class="fas fa-sign-out-alt"></i>Logout</a>
 EOT;
     }
     echo <<<EOT

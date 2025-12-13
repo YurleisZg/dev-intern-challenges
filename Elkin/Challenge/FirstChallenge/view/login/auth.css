@@ -1,0 +1,140 @@
+.navtop {
+    background-color: #ffffff;
+    height: 65px;
+    width: 100%;
+    border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navtop div {
+    display: flex;
+    margin: 0 auto;
+    max-width: 1200px;
+    height: 100%;
+    padding: 0 96px;
+}
+
+.navtop div h1 {
+    flex: 1;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+    color: #37352f;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+}
+
+.navtop div a {
+    padding: 0 14px;
+    text-decoration: none;
+    color: rgba(55, 53, 47, 0.65);
+    font-weight: 500;
+    font-size: 15px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 3px;
+    transition: background-color 0.1s ease-in;
+}
+
+.navtop div a i {
+    padding: 0 7px 0 0;
+    font-size: 18px;
+}
+
+.navtop div a:hover {
+    background-color: rgba(55, 53, 47, 0.08);
+    color: #37352f;
+}
+/* ================================
+   LOGIN / REGISTER - Estilo Notion (Corregido)
+   ================================ */
+
+.auth-container {
+    max-width: 420px;
+    margin: 60px auto;
+    background: #ffffff;
+    padding: 28px 32px 32px;
+    border: 1px solid rgba(55, 53, 47, 0.12);
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(55, 53, 47, 0.05);
+}
+
+.auth-container h2 {
+    margin: 0 0 20px 0;
+    font-size: 26px;
+    font-weight: 700;
+    color: #37352f;
+    text-align: center;
+}
+
+/* Eliminamos los gaps exagerados */
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Cada campo queda organizado en una columna */
+.auth-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.auth-container label {
+    font-weight: 600;
+    color: #37352f;
+    font-size: 14px;
+}
+
+.auth-container input {
+    padding: 10px 12px;
+    border: 1px solid rgba(55, 53, 47, 0.16);
+    border-radius: 4px;
+    font-size: 15px;
+    color: #37352f;
+    transition: border-color 0.1s ease-in, box-shadow 0.1s ease-in;
+    width: 100%;
+}
+
+.auth-container input:focus {
+    outline: none;
+    border-color: #2383e2;
+    box-shadow: 0 0 0 1px #2383e2;
+}
+
+.auth-container button {
+    margin-top: 10px;
+    background-color: #2383e2;
+    padding: 12px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.1s ease-in;
+}
+
+.auth-container button:hover {
+    background-color: #1a6ec0;
+}
+
+.auth-footer {
+    margin-top: 18px;
+    text-align: center;
+    color: rgba(55, 53, 47, 0.65);
+}
+
+.auth-footer a {
+    color: #2383e2;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}

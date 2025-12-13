@@ -41,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['current_level'] = 1;
     $_SESSION['strikes'] = 0;
     unset($_SESSION['pattern_challenge_deadline'], $_SESSION['pattern_challenge_time_limit']);
+    // Registrar inicio del juego para cálculo de tiempo
+    $_SESSION['pattern_game_start'] = time();
 
     header('Location: pattern_play.php');
     exit;
