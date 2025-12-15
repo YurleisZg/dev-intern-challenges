@@ -185,9 +185,9 @@
                         <td><?php echo date('Y-m-d H:i', strtotime($record->getCreatedAt())); ?></td>
                         <td class="amount strong"><?php echo number_format($record->getGrandTotalSalary(), 2); ?></td>
                         <td>
-                            <a href="index.php?action=view&id=<?php echo $record->getId(); ?>" class="btn btn-green" style="padding: 5px 10px;">Cargar</a>
+                            <a href="index.php?action=view&id=<?php echo $record->getId(); ?>" class="btn btn-green" style="padding: 5px 10px;">Charge</a>
                             
-                            <a href="index.php?action=delete&id=<?php echo $record->getId(); ?>" class="btn btn-red" style="padding: 5px 10px;" onclick="return confirm('¿Eliminar registro #<?php echo $record->getId(); ?>?');">Eliminar</a>
+                            <a href="index.php?action=delete&id=<?php echo $record->getId(); ?>" class="btn btn-red" style="padding: 5px 10px;" onclick="return confirm('¿delete #<?php echo $record->getId(); ?>?');">Delete</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
