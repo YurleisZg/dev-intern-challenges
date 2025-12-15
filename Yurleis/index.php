@@ -26,7 +26,7 @@ $projects = [
             'link' => 'php/stage7_9/public/dashboard.php'
         ],
         [
-            'title' => 'Challenges first Week Updated',
+            'title' => 'Challenges Updated',
             'description' => 'Project 4 description',
             'link' => 'project4.html'
         ]

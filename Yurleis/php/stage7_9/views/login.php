@@ -48,7 +48,11 @@
 
             <div class="auth-footer">
                 <p>Don't have an account? <a href="register.php">Register here</a></p>
+                <a href="../../../index.php">
+                    Go to homepage
+                </a>
             </div>
+             
         </div>
     </div>
 </body>
