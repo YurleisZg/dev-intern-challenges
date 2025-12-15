@@ -72,38 +72,6 @@ class SalaryRecordRepository implements SalaryRecordRepositoryInterface
             $record->setId((int)$this->db->lastInsertId());
             return $record->getId();
         } else {
-            // UPDATE: Update existing record
-            $sql = "UPDATE " . self::TABLE . " SET 
-                    base_salary = :baseSalary, 
-                    tax = :tax, 
-                    health_insurance = :healthInsurance, 
-                    bonus = :bonus, 
-                    final_base_net = :finalBaseNet, 
-                    total_overtime_payment = :totalOtPayment, 
-                    grand_total_salary = :grandTotalSalary, 
-                    input_rows = :rows, 
-                    input_dates = :dates, 
-                    input_start_times = :starts, 
-                    input_end_times = :ends, 
-                    overtime_details_json = :otDetails 
-                    WHERE id = :id";
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([
-                'id' => $record->getId(),
-                'userId' => $record->getUserId(),
-                'baseSalary' => $record->getBaseSalary(),
-                'tax' => $record->getTax(),
-                'healthInsurance' => $record->getHealthInsurance(),
-                'bonus' => $record->getBonus(),
-                'finalBaseNet' => $record->getFinalBaseNet(),
-                'totalOtPayment' => $record->getTotalOvertimePayment(),
-                'grandTotalSalary' => $record->getGrandTotalSalary(),
-                'rows' => $record->getInputRows(),
-                'dates' => $inputDatesJson,
-                'starts' => $inputStartTimesJson,
-                'ends' => $inputEndTimesJson,
-                'otDetails' => $otDetailsJson,
-            ]);
             return $record->getId();
         }
     }

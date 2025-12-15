@@ -25,7 +25,7 @@ class SalaryController
 
     private function getLoggedInUserId(): int
     {
-        return $_SESSION['user_id'] ?? 1;
+        return $_SESSION['user_id'];
     }
 
     private function loadState(): SalaryRecord
