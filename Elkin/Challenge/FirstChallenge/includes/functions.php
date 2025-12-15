@@ -1,6 +1,4 @@
 <?php
-
-
 function calculateTax($grossSalary) {
     if ($grossSalary < 1000) {
         return 0;
@@ -195,4 +193,3 @@ function processSalaryForm($overtimeRows) {
 
     return [$formData, $result];
 }
-

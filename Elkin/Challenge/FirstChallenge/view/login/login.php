@@ -1,7 +1,6 @@
 <?php
-require_once '../../controllers/auth.php';
-include '../templates.php';
-require_once __DIR__ . '/../../config/path.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
+include '../html-templates.php';
 $css_path = AUTH_CSS;
 
 $error = "";
@@ -11,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = loginUser($_POST['email'], $_POST['password']);
 
     if ($result['success']) {
-        header('Location: ../challenge1.php');
+        header('Location: ../salary-calculator.php');
         exit;
     } else {
         $error = $result['message'];

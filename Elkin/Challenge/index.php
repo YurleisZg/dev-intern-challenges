@@ -99,7 +99,7 @@
 
         <div class="exercise">
             <span class="exercise-title">Challenge 1 — Salary Calculator</span>
-            <a href="FirstChallenge/view/challenge1.php">Open</a>
+            <a href="FirstChallenge/view/salary-calculator.php">Open</a>
         </div>
         <div class="exercise">
             <span class="exercise-title">Challenge 2 — The fruit set logic</span>

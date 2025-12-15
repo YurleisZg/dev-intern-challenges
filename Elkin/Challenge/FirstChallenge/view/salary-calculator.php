@@ -1,9 +1,7 @@
 <?php
-session_start();
+require_once __DIR__ . '/../vendor/autoload.php';
 
-require_once '../config/DatabaseConn.php';
-require_once '../models/SalaryRecordModel.php';
-require_once '../utils.php';
+session_start();
 
 if (!isset($_SESSION['isAuth']) || $_SESSION['isAuth'] !== true) {
 	header('Location: ./login/login.php');
@@ -103,4 +101,4 @@ $savedRecords = SalaryRecord::listByUser($userId);
 
 // Render
 $overtimeRows = (int) $overtimeRows;
-require __DIR__ . '/view.php';
+require __DIR__ . '/salary-form.php';
