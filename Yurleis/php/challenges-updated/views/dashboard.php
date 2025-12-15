@@ -1,5 +1,6 @@
 <?php
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,10 +22,10 @@
             </div>
 
             <nav class="sidebar-nav">
-                <a href="salary.php" class="nav-item <?= $activeItem === 'salary' ? 'active' : '' ?>">
+                <a href="index.php?action=salary" class="nav-item <?= $activeItem === 'salary' ? 'active' : '' ?>">
                     <span class="icon"></span> Salary Calculator
                 </a>
-               <a href="pattern_game.php" class="nav-item <?= $activeItem === 'pattern_game' ? 'active' : '' ?>">
+               <a href="index.php?action=pattern_game" class="nav-item <?= $activeItem === 'pattern_game' ? 'active' : '' ?>">
                     <span class="icon"> </span> Pattern Game
                 </a>
             </nav>
@@ -48,8 +49,8 @@
                 </div>
 
                 <div class="user-menu">
-                    <span class="user-name"><?= htmlspecialchars('User') ?></span>
-                    <span class="user-email"><?= htmlspecialchars('email@example.com') ?></span>
+                    <span class="user-name"><?= htmlspecialchars($_SESSION['user_name'] ?? 'Guest') ?></span>
+                    <span class="user-email"><?= htmlspecialchars($_SESSION['user_email'] ?? 'email@example.com') ?></span>
                 </div>
             </header>
 
