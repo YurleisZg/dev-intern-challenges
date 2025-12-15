@@ -58,7 +58,7 @@ $projects = [
         </h2>
         <?php foreach ($projects as $groupName => $groupProjects): ?>
             <div class="acordion-container">
-                <details name="challenges" open>
+                <details name="challenges">
                 <summary class="summary">
                     <?php echo htmlspecialchars($groupName); ?>
                 </summary>
