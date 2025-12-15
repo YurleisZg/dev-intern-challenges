@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../config/path.php';
 function template_header($title,$css_path, $css_path1='') {
     if (session_status() !== PHP_SESSION_ACTIVE) {
         session_start();

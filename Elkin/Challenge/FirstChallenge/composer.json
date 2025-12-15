@@ -1,0 +1,20 @@
+{
+    "name": "dev-intern-challenges/first-challenge",
+    "description": "Salary Calculator Challenge with autoloading",
+    "type": "project",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "classmap": [
+            "models/",
+            "config/",
+            "controllers/"
+        ],
+        "files": [
+            "includes/functions.php",
+            "config/path.php",
+            "controllers/auth.php"
+        ]
+    }
+}
