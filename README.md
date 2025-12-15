@@ -2,7 +2,7 @@
 
 This document explains how to set up and run the application locally. The project requires a web server environment (like **Apache** or **Nginx**).
 
-# Challenges
+## Challenges Overview
 
 This project is organized into stages:
 
@@ -11,6 +11,27 @@ This project is organized into stages:
 - **Stage 2 – Language Fundamentals (Basic PHP)**
 - **Stage 3 – Data Structures, Arrays, and Strings**
 - **Stage 4 – PHP + HTML: Forms and Superglobals**
+
+In addition, there are specific challenge folders under `Elkin/Challenge/`:
+
+- **FirstChallenge – Salary Calculator with Auth & Composer**
+  - **Path**: `Elkin/Challenge/FirstChallenge/`
+  - **Entry point**: `index.php`
+  - **What it does**: Simple authentication (login/register) plus a salary calculator with overtime and bonus logic, using Composer for autoloading (`composer.json`).
+  - **How to run (XAMPP example)**:
+    - Copy the whole repo into `C:\xampp\htdocs\dev-intern-challenges`.
+    - Ensure the database configuration in `Elkin/Challenge/FirstChallenge/config/app.json` matches your MySQL credentials.
+    - Install Composer dependencies from that folder (if needed): `composer install`.
+    - Open in browser: `http://localhost/dev-intern-challenges/Elkin/Challenge/FirstChallenge/index.php`.
+
+- **ThirdChallenge – Pattern Memory Game**
+  - **Path**: `Elkin/Challenge/ThirdChallenge/`
+  - **Main page**: `challenge3.php`
+  - **What it does**: A “pattern memory” game where the user creates a 5-row pattern and must reproduce it within a time limit, with strikes and levels (`pattern_setup.php`, `pattern_play.php`, `pattern_success.php`).
+  - **How to run (XAMPP example)**:
+    - With the project under `C:\xampp\htdocs\dev-intern-challenges`.
+    - Open in browser: `http://localhost/dev-intern-challenges/Elkin/Challenge/ThirdChallenge/challenge3.php`.
+
 ---
 
 ## 📂 Project Structure
@@ -26,7 +47,12 @@ The project is organized into a root Docker configuration and specific user fold
 │   ├── stage1/              # Basic PHP Index [cite: 7]
 │   ├── stage2/              # PHP Calculator, Syntax, & Loops 
 │   ├── stage3/              # PHP Arrays & Search Logic 
-│   └── stage4/              # Forms & Sign Up exercises 
+│   ├── stage4/              # Forms & Sign Up exercises 
+│   ├── stage5/              # Sessions, login status & auth-related exercises
+│   ├── stage6/              # Advanced / extra exercises for Elkin
+│   └── Challenge/           # Challenge folders for Elkin
+│       ├── FirstChallenge/  # Salary Calculator with Auth & Composer
+│       └── ThirdChallenge/  # Pattern Memory Game
 └── Yurleis/                 # Workspace for Yurleis
     ├── index.php            # Main entry point in root
     ├── styles/              # CSS styles directory
