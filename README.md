@@ -112,3 +112,9 @@ RUN a2enmod rewrite
 # Copy custom php.ini file (if you have one)
 # COPY php.ini /usr/local/etc/php/
 # The default working directory is /var/www/html
+
+### Special Notes
+
+For **Yurleis/php/challenges/** folder:
+- Run `composer install` to install dependencies
+- Create a `.env` file with your database credentials for complete repository access
