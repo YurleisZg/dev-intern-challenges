@@ -10,4 +10,5 @@ interface SalaryRecordRepositoryInterface
     public function findById(int $id): ?SalaryRecord;
     public function findAllByUserId(int $userId): array;
     public function delete(int $id): bool;
+
 }

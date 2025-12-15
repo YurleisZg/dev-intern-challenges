@@ -55,17 +55,17 @@ class SalaryService
         $rows = $state->getInputRows();
 
         // 3. Update overtime data
-        $state->setInputDates($postData['date_overtime'] ?? $state->getInputDates());
-        $state->setInputStartTimes($postData['start_time_overtime'] ?? $state->getInputStartTimes());
-        $state->setInputEndTimes($postData['end_time_overtime'] ?? $state->getInputEndTimes());
-        
+        $state->setInputDates($postData['date_overtime'] ?? []);
+        $state->setInputStartTimes($postData['start_time_overtime'] ?? []);
+        $state->setInputEndTimes($postData['end_time_overtime'] ?? []);
+
         // 4. Handle add/remove row actions
         if ($action === 'add_overtime') {
             $state->setInputRows($rows + 1);
         } elseif ($action === 'remove_overtime' && $rows > 0) {
             $newRows = $rows - 1;
             $state->setInputRows($newRows);
-            
+
             // Trim arrays to new size (using Setters)
             $state->setInputDates(array_slice($state->getInputDates(), 0, $newRows));
             $state->setInputStartTimes(array_slice($state->getInputStartTimes(), 0, $newRows));
@@ -100,7 +100,7 @@ class SalaryService
         $state->setTotalOvertimePayment(0.0);
 
         $rows = $state->getInputRows();
-        
+
         if ($rows > 0) {
             $hourlyRate = $bs / 160;
 
@@ -112,7 +112,7 @@ class SalaryService
                 if ($d === '' || $st === '' || $et === '') {
                     continue;
                 }
-                
+
                 // NOTE: 'get_overtime_hours_by_rules' comes from the 'overtime_rules.php' file
                 $hoursData = get_overtime_hours_by_rules($d, $st, $et);
                 $hours = $hoursData['overtime_hours'];
@@ -127,27 +127,27 @@ class SalaryService
                 $extraPay = 0.0;
                 $extra_labels = [];
 
-                                if ($sundayHours > 0) {
-                                    $extraSunday = 0.50 * $hourlyRate * $sundayHours;
-                                    $extraPay += $extraSunday;
-                                    $extra_labels[] = sprintf(
-                                        "+50%% Sunday/Holiday premium on %.2f Sunday overtime hours",
-                                        $sundayHours
-                                    );
-                                }
+                if ($sundayHours > 0) {
+                    $extraSunday = 0.50 * $hourlyRate * $sundayHours;
+                    $extraPay += $extraSunday;
+                    $extra_labels[] = sprintf(
+                        "+50%% Sunday/Holiday premium on %.2f Sunday overtime hours",
+                        $sundayHours
+                    );
+                }
 
-                                if ($nightHours > 0) {
-                                    $extraNight = 0.25 * $hourlyRate * $nightHours;
-                                    $extraPay += $extraNight;
-                                    $extra_labels[] = sprintf(
-                                        "+25%% Night shift premium on %.2f night overtime hours",
-                                        $nightHours
-                                    );
-                                }
+                if ($nightHours > 0) {
+                    $extraNight = 0.25 * $hourlyRate * $nightHours;
+                    $extraPay += $extraNight;
+                    $extra_labels[] = sprintf(
+                        "+25%% Night shift premium on %.2f night overtime hours",
+                        $nightHours
+                    );
+                }
 
                 $total = $basePay + $extraPay;
                 $details = $state->getOvertimeDetails();
-                
+
                 $details[] = [
                     'date' => $d,
                     'hours' => $hours,
@@ -172,7 +172,7 @@ class SalaryService
         if ($state->getUserId()) {
             $this->salaryRepository->save($state);
         }
-        
+
         return $state;
     }
 
@@ -181,12 +181,12 @@ class SalaryService
     {
         return $this->salaryRepository->findAllByUserId($userId);
     }
-    
+
     public function getRecord(int $id): ?SalaryRecord
     {
         return $this->salaryRepository->findById($id);
     }
-    
+
     public function deleteRecord(int $id): bool
     {
         return $this->salaryRepository->delete($id);
