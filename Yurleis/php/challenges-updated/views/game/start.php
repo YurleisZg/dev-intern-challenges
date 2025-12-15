@@ -22,8 +22,8 @@
         <table class="table-container">
             <thead>
                 <tr>
-                    <th>Date</th>
                     <th>Level</th>
+                    <th>Strikes</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -34,14 +34,16 @@
                 <?php else: ?>
                     <?php foreach ($history as $record): ?>
                         <tr>
-                            <td><?php echo date('m/d/Y H:i', strtotime($record->playedAt ?? $record->created_at)); ?></td>
                             <td>Level <?php echo $record->currentLevel; ?>/5</td>
+                            <td><?php echo $record->strikes; ?>/3</td>
                             <td>
                                 <span class="badge <?php echo $record->status === 'victory' ? 'status-win' : ($record->status === 'game_over' ? 'status-lose' : 'status-progress'); ?>">
                                     <?php echo str_replace('_', ' ', $record->status); ?>
                                 </span>
                             </td>
                             <td>
+                                <a href="index.php?action=pattern_game&view_id=<?php echo $record->id; ?>" >Play Again
+                                </a> <br>
                                 <a href="index.php?action=pattern_game&delete_id=<?php echo $record->id; ?>" 
                                    class="btn-link-red" 
                                    onclick="return confirm('Delete this record?')">Delete</a>
