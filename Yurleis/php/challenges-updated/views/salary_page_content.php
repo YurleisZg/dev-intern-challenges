@@ -36,32 +36,27 @@
             <h3 class="steps">Overtime Shifts</h3>
             
             <input type="hidden" name="rows" value="<?php echo htmlspecialchars($rows ?? 0); ?>">
-
             <?php 
-            // Aseguramos que $rows esté definido y sea un número
             $numRows = (int)($rows ?? 0);
             for ($i = 0; $i < $numRows; $i++): 
-                $dateVal = htmlspecialchars($date[$i] ?? '');
-                $startVal = htmlspecialchars($start_time[$i] ?? '');
-                $endVal = htmlspecialchars($end_time[$i] ?? '');
+                $dateVal = htmlspecialchars($input_dates[$i] ?? '');
+                $startVal = htmlspecialchars($input_start_times[$i] ?? '');
+                $endVal = htmlspecialchars($input_end_times[$i] ?? '');
             ?>
                 <fieldset class="overtime-block">
                     <legend>Shift #<?php echo $i + 1; ?></legend>
                     
                     <div class="field">
-                        <label for="date_overtime_<?php echo $i; ?>">Date</label>
-                        <input type="date" id="date_overtime_<?php echo $i; ?>" 
-                               name="date_overtime[]" value="<?php echo $dateVal; ?>">
+                        <label>Date</label>
+                        <input type="date" name="date_overtime[]" value="<?php echo $dateVal; ?>">
                     </div>
                     <div class="field">
-                        <label for="start_time_overtime_<?php echo $i; ?>">Start Time</label>
-                        <input type="time" id="start_time_overtime_<?php echo $i; ?>" 
-                               name="start_time_overtime[]" value="<?php echo $startVal; ?>">
+                        <label>Start Time</label>
+                        <input type="time" name="start_time_overtime[]" value="<?php echo $startVal; ?>">
                     </div>
                     <div class="field">
-                        <label for="end_time_overtime_<?php echo $i; ?>">End Time</label>
-                        <input type="time" id="end_time_overtime_<?php echo $i; ?>" 
-                               name="end_time_overtime[]" value="<?php echo $endVal; ?>">
+                        <label>End Time</label>
+                        <input type="time" name="end_time_overtime[]" value="<?php echo $endVal; ?>">
                     </div>
                 </fieldset>
             <?php endfor; ?>
