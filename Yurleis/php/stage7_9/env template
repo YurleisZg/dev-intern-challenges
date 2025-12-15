@@ -1,0 +1,5 @@
+DB_HOST=your localhost
+DB_PORT=your port
+DB_USER = your username
+DB_PASSWORD = your password
+DB_NAME = your database name

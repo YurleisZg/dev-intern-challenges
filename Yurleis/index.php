@@ -21,9 +21,14 @@ $projects = [
 
     'Second Week' => [
         [
-            'title' => 'Project 4',
-            'description' => 'Project 4 description',
-            'link' => 'project4.html'
+            'title' => 'To Do',
+            'description' => 'A simple To-Do list application to manage tasks',
+            'link' => 'php/stage7_9/public/dashboard.php'
+        ],
+        [
+            'title' => 'Challenges Updated',
+            'description' => 'Updated challenges that now allow saving and editing reports',
+            'link' => 'php/challenges-updated/public/index.php'
         ]
         ],
 ];
@@ -49,11 +54,11 @@ $projects = [
             class="icon icon-tabler icons-tabler-outline icon-tabler-calendar-week" style="vertical-align: middle;"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
             <path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M7 14h.013" /><path d="M10.01 14h.005" /><path d="M13.01 14h.005" />
             <path d="M16.015 14h.005" /><path d="M13.015 17h.005" /><path d="M7.01 17h.005" /><path d="M10.01 17h.005" />
-            </svg> Challenges for week
+            </svg> Challenges
         </h2>
         <?php foreach ($projects as $groupName => $groupProjects): ?>
             <div class="acordion-container">
-                <details name="challenges" open>
+                <details name="challenges">
                 <summary class="summary">
                     <?php echo htmlspecialchars($groupName); ?>
                 </summary>
