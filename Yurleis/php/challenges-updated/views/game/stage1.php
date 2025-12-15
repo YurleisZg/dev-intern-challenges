@@ -3,9 +3,12 @@ $timeLimit = 20;
 if (!isset($_SESSION['deadline_stage1'])) {
     $_SESSION['deadline_stage1'] = time() + $timeLimit;
 }
+
 $remaining = $_SESSION['deadline_stage1'] - time();
-if ($remaining < 0) $remaining = 0;
-?>
+
+if ($remaining < 0) {
+    $remaining = 0;
+}
 ?>
 
 <div class="game-container">

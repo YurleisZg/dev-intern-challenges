@@ -33,7 +33,14 @@ class GameController {
 }
 
     public function handleStage1(): string {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        unset($_SESSION['deadline_stage1']);
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            unset($_SESSION['deadline_stage1']);
+            
             $pattern = [];
             foreach ($_POST['rows'] as $i => $row) {
                 for ($j = 0; $j < 5; $j++) $pattern[$i][$j] = isset($row[$j]) ? 1 : 0;
