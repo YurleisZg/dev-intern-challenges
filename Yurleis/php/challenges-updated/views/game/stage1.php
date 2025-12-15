@@ -3,9 +3,12 @@ $timeLimit = 20;
 if (!isset($_SESSION['deadline_stage1'])) {
     $_SESSION['deadline_stage1'] = time() + $timeLimit;
 }
+
 $remaining = $_SESSION['deadline_stage1'] - time();
-if ($remaining < 0) $remaining = 0;
-?>
+
+if ($remaining < 0) {
+    $remaining = 0;
+}
 ?>
 
 <div class="game-container">
@@ -20,6 +23,10 @@ if ($remaining < 0) $remaining = 0;
             Activate at least one switch in each row. You have 20 seconds to save.
         </p>
 
+        <div id="error-message" style="color: red; font-weight: bold; margin-bottom: 10px; display: none;">
+            You must activate at least one switch in each row!
+        </div>
+
         <form id="pattern-form" method="post" action="index.php?action=pattern_game&step=stage1">
             <div class="grid">
                 <?php for ($i = 0; $i < 5; $i++): ?>
@@ -28,7 +35,7 @@ if ($remaining < 0) $remaining = 0;
                         <div style="display: flex; gap: 12px;">
                             <?php for ($j = 0; $j < 5; $j++): ?>
                                 <label class="toggle" style="position: relative; display: inline-block; cursor: pointer;">
-                                    <input type="checkbox" name="rows[<?php echo $i; ?>][<?php echo $j; ?>]" style="position: absolute; opacity: 0;">
+                                    <input type="checkbox" name="rows[<?php echo $i; ?>][<?php echo $j; ?>]" data-row="<?php echo $i; ?>" style="position: absolute; opacity: 0;">
                                     <span class="toggle-ui" style="
                                         display: block;
                                         width: 40px;
@@ -81,6 +88,17 @@ if ($remaining < 0) $remaining = 0;
     .toggle input:checked:hover + .toggle-ui {
         transform: scale(1.0);
     }
+
+    .row-error {
+        border: 2px solid red !important;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
 </style>
 
 <script>
@@ -88,13 +106,69 @@ if ($remaining < 0) $remaining = 0;
         let remaining = <?php echo $remaining; ?>;
         const timerSpan = document.getElementById('timer');
         const form = document.getElementById('pattern-form');
+        const errorMessage = document.getElementById('error-message');
+
+        function validatePattern() {
+            const rows = 5;
+            for (let i = 0; i < rows; i++) {
+                const rowCheckboxes = document.querySelectorAll(`input[data-row="${i}"]`);
+                const hasChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+                if (!hasChecked) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function highlightEmptyRows() {
+            const rows = 5;
+            let hasError = false;
+            
+            for (let i = 0; i < rows; i++) {
+                const rowCheckboxes = document.querySelectorAll(`input[data-row="${i}"]`);
+                const hasChecked = Array.from(rowCheckboxes).some(cb => cb.checked);
+                const rowElements = document.querySelectorAll(`input[data-row="${i}"] + .toggle-ui`);
+                
+                rowElements.forEach(element => {
+                    element.classList.remove('row-error');
+                });
+                
+                if (!hasChecked) {
+                    rowElements.forEach(element => {
+                        element.classList.add('row-error');
+                    });
+                    hasError = true;
+                }
+            }
+            
+            return hasError;
+        }
+
+        form.addEventListener('submit', function(e) {
+            if (!validatePattern()) {
+                e.preventDefault();
+                errorMessage.style.display = 'block';
+                highlightEmptyRows();
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                    document.querySelectorAll('.row-error').forEach(el => {
+                        el.classList.remove('row-error');
+                    });
+                }, 3000);
+            }
+        });
 
         const interval = setInterval(() => {
             remaining--;
             if (remaining <= 0) {
                 clearInterval(interval);
                 timerSpan.textContent = '0';
-                form.submit(); // Automatic submission when time runs out
+                if (!validatePattern()) {
+                    // Game over - redirect to failure page
+                    window.location.href = 'index.php?action=pattern_game&result=failed';
+                } else {
+                    form.submit();
+                }
             } else {
                 timerSpan.textContent = remaining;
             }

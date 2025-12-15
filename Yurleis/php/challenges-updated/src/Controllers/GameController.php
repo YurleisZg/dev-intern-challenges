@@ -16,24 +16,57 @@ class GameController {
         $this->userId = $_SESSION['user_id'] ?? 0;
     }
 
-  public function index(): string {
-    if (isset($_GET['delete_id'])) {
-        $this->repository->delete((int)$_GET['delete_id'], $this->userId);
-        header('Location: index.php?action=pattern_game');
-        exit;
+    public function index(): string {
+        if (isset($_GET['delete_id'])) {
+            $this->repository->delete((int)$_GET['delete_id'], $this->userId);
+            header('Location: index.php?action=pattern_game');
+            exit;
+        }
+
+        if (isset($_GET['view_id'])) {
+            $history = $this->repository->getHistory($this->userId);
+            $oldSession = null;
+            
+            foreach ($history as $record) {
+                if ($record->id == (int)$_GET['view_id']) {
+                    $oldSession = $record;
+                    break;
+                }
+            }
+
+            if ($oldSession) {
+                $newSession = new GameSession([
+                    'user_id'       => $this->userId,
+                    'pattern'       => $oldSession->pattern,    
+                    'current_level' => $oldSession->currentLevel, 
+                    'strikes'       => $oldSession->strikes,      
+                    'status'        => 'in_progress'            
+                ]);
+                $this->repository->save($newSession);
+
+                unset($_SESSION['deadline_stage1']);
+                header('Location: index.php?action=pattern_game&step=stage2');
+                exit;
+            }
+        }
+
+        $activeSession = $this->repository->findActiveSession($this->userId);
+        $history = $this->repository->getHistory($this->userId); 
+        
+        ob_start();
+        require __DIR__ . '/../../views/game/start.php';
+        return ob_get_clean();
     }
 
-    $activeSession = $this->repository->findActiveSession($this->userId);
-    
-    $history = $this->repository->getHistory($this->userId); 
-    
-    ob_start();
-    require __DIR__ . '/../../views/game/start.php';
-    return ob_get_clean();
-}
-
     public function handleStage1(): string {
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        unset($_SESSION['deadline_stage1']);
+        }
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            unset($_SESSION['deadline_stage1']);
+            
             $pattern = [];
             foreach ($_POST['rows'] as $i => $row) {
                 for ($j = 0; $j < 5; $j++) $pattern[$i][$j] = isset($row[$j]) ? 1 : 0;

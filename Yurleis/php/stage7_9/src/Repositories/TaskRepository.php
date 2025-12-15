@@ -50,7 +50,6 @@ class TaskRepository implements TaskRepositoryInterface
 
         $stmt->bindValue(':status_id', $task->getStatus_id());
         $stmt->bindValue(':id', $task->getId());
-        $stmt->bindValue(':user_id', $task->getUser_id());
 
         return $stmt->execute();
     }
