@@ -27,8 +27,8 @@ $projects = [
         ],
         [
             'title' => 'Challenges Updated',
-            'description' => 'Project 4 description',
-            'link' => 'project4.html'
+            'description' => 'Updated challenges that now allow saving and editing reports',
+            'link' => 'php/challenges-updated/views/dashboard.php'
         ]
         ],
 ];
