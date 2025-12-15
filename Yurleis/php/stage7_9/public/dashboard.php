@@ -9,7 +9,6 @@ use App\Controllers\TaskController;
 use App\Services\AuthService;
 use App\Repositories\UserRepository;
 
-// Verificar autenticación
 $authService = new AuthService(new UserRepository());
 if (!$authService->isAuthenticated()) {
     header('Location: login.php');
