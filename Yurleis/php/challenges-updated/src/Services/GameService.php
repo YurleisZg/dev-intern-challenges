@@ -34,7 +34,7 @@ class GameService {
             if ($session->strikes >= 3) {
                 $session->status = 'game_over';
             } elseif ($session->currentLevel > 1) {
-                $session->currentLevel--; // Penalización de bajar nivel
+                $session->currentLevel--; 
             }
         }
 

@@ -50,8 +50,6 @@ class GameRepository implements GameRepositoryInterface {
         $stmt = $this->db->prepare("SELECT * FROM game_sessions WHERE user_id = :uid ORDER BY created_at DESC");
         $stmt->execute(['uid' => $userId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Retornamos objetos GameSession para mantener la consistencia del modelo
         return array_map(fn($row) => new GameSession($row), $rows);
     }
 
