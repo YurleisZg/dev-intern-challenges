@@ -89,14 +89,12 @@
             <h3 class="steps">Base Salary Breakdown</h3>
             <table class="table-container">
                 <tr>
-                    <th>Gross Salary</th>
                     <th>(-) Tax</th>
                     <th>(-) Health Insurance</th>
                     <th>(+) Bonus</th>
                     <th>Net Base Salary</th>
                 </tr>
                 <tr>
-                    <td class="amount neutral"><?php echo number_format($base_salary, 2); ?></td>
                     <td class="amount negative"><?php echo number_format($tax, 2); ?></td>
                     <td class="amount negative"><?php echo number_format($health_insurance, 2); ?></td>
                     <td class="amount positive"><?php echo number_format($bonus, 2); ?></td>
