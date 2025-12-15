@@ -27,8 +27,11 @@
             </nav>
 
             <div class="sidebar-footer">
+                <a href="../../../index.php" class="nav-item">
+                Back to Home
+                </a>
                 <a href="logout.php" class="nav-item">
-                    <span class="icon">←</span> Log Out
+                   Log Out
                 </a>
             </div>
         </aside>
