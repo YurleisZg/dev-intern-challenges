@@ -477,3 +477,19 @@ These are configured in:
    Start-Sleep -Seconds 15
    docker-compose logs mysql
    ```
+```dockerfile
+# Use an official PHP image with Apache
+FROM php:8.2-apache
+# Install the MySQLi extension (necessary to connect PHP with MySQL)
+RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Enable the Apache rewrite module, if necessary for friendly URLs
+RUN a2enmod rewrite
+# Copy custom php.ini file (if you have one)
+# COPY php.ini /usr/local/etc/php/
+# The default working directory is /var/www/html
+
+### Special Notes
+
+For **Yurleis/php/challenges/** folder:
+- Run `composer install` to install dependencies
+- Create a `.env` file with your database credentials for complete repository access
