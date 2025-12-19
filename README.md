@@ -75,7 +75,9 @@ Make sure you have the following installed and configured before proceeding:
 
 ### For the Docker Method
 * **Docker Desktop**: Includes **Docker Engine** and **Docker Compose**. This will allow you to manage the application and database containers.
-* **Source Code**: The main project folder (where the `docker-compose.yml` file is located in section 3.2).
+* **Source Code**: The main project folder (where the `docker-compose.yml` file is located).
+
+> **📖 For detailed Docker instructions, see [DOCKER_GUIDE.md](DOCKER_GUIDE.md)**
 
 ---
 
@@ -114,27 +116,364 @@ This method is common and easy to start, but it relies on your host operating sy
 
 ---
 
-## 3. Run with Docker (Recommended Method)
 
-This method uses Docker containers to create an isolated and reproducible environment, which is ideal for development and team collaboration.
+# Docker Setup Guide
 
-### Step 3.1: Docker File Structure
+This guide provides step-by-step instructions for running the project using Docker. This is the **recommended method** for development as it ensures consistency across all team members' environments.
 
-Create the following files in the **root** of your project:
+## Prerequisites
 
-1.  **`Dockerfile`**: Defines the image for our PHP container.
-2.  **`docker-compose.yml`**: Defines and connects the services (the web server and the database).
-3.  Create a folder for the source code, for example, **`src`**, and place all your PHP, HTML, etc. files there.
+- **Docker Desktop**: Download from [Docker's official website](https://www.docker.com/products/docker-desktop)
+- Ensure Docker is installed and running on your system
+- Basic familiarity with PowerShell/Terminal
 
-#### `Dockerfile` (Example for a PHP with Apache Environment)
+---
 
-```dockerfile
-# Use an official PHP image with Apache
-FROM php:8.2-apache
-# Install the MySQLi extension (necessary to connect PHP with MySQL)
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-# Enable the Apache rewrite module, if necessary for friendly URLs
-RUN a2enmod rewrite
-# Copy custom php.ini file (if you have one)
-# COPY php.ini /usr/local/etc/php/
-# The default working directory is /var/www/html
+## Quick Start Commands
+
+Follow these commands **in order** after pulling the project:
+
+### Step 1: Navigate to the project folder
+
+```powershell
+cd "C:\Users\[YOUR_USERNAME]\PhpstormProjects\dev-intern-challenges"
+```
+
+### Step 2: Verify Docker is installed
+
+```powershell
+docker --version
+docker-compose --version
+```
+
+Both should display version numbers (e.g., `Docker version 24.0.0`).
+
+### Step 3: Clean up previous containers (if any)
+
+```powershell
+docker-compose down -v
+docker system prune -f
+```
+
+This ensures you're starting fresh with a clean state.
+
+### Step 4: Build and start all containers
+
+```powershell
+docker-compose up --build -d
+```
+
+**This command will:**
+- Build the PHP/Apache Docker image
+- Download and start MySQL database
+- Download and start phpMyAdmin
+- Start the PHP web server
+- Automatically initialize both databases:
+  - `phpaccountant` (FirstChallenge)
+  - `thirdchallenge` (ThirdChallenge)
+
+The `-d` flag runs containers in the background.
+
+### Step 5: Wait for MySQL to initialize (2-3 minutes)
+
+```powershell
+Start-Sleep -Seconds 10
+docker-compose logs mysql
+```
+
+**You should see this message:**
+```
+ready for connections. Version: '8.4.7'
+```
+
+If you don't see it, wait another minute and run the command again.
+
+### Step 6: Verify all containers are running
+
+```powershell
+docker-compose ps
+```
+
+**Expected output:**
+```
+NAME                COMMAND             STATUS
+mysql              "docker-entrypoint..." Up 2 minutes
+phpmyadmin         "/docker-entrypoint..." Up 2 minutes
+first_steps_php    "apache2-foreground"  Up 2 minutes
+```
+
+All three should show `Up`.
+
+---
+
+## Access Your Applications
+
+Once Docker is running successfully, open your browser and navigate to:
+
+### FirstChallenge - Salary Calculator with Authentication
+
+- **URL**: http://localhost:3000/Elkin/Challenge/FirstChallenge/
+- **Database**: `phpaccountant`
+- **Test Users**:
+  - Username: `elkin` | Password: (any)
+  - Username: `david` | Password: (any)
+
+### ThirdChallenge - Pattern Memory Game
+
+- **URL**: http://localhost:3000/Elkin/Challenge/ThirdChallenge/challenge3.php
+- **Database**: `thirdchallenge`
+- **Sample Scores**: Elkin (9750 points) and David (9650 points)
+
+### phpMyAdmin - Database Administration
+
+- **URL**: http://localhost:8080
+- **Username**: `root`
+- **Password**: `root`
+- **Purpose**: Manage databases, run SQL queries, view tables
+
+---
+
+## Database Information
+
+### phpaccountant (FirstChallenge)
+
+**Tables:**
+- `users` - User accounts and authentication
+- `salary_records` - Salary calculation records
+- `salary_records_details` - Shift details (date, start time, end time)
+
+**Sample Data:**
+- 2 pre-created users (elkin, david)
+- 2 sample salary records
+
+### thirdchallenge (ThirdChallenge)
+
+**Table:**
+- `pattern_scores` - Game scores and times
+
+**Sample Data:**
+- Elkin: 9750 points in 5 seconds
+- David: 9650 points in 7 seconds
+
+---
+
+## Useful Docker Commands
+
+### View container status and logs
+
+```powershell
+# See all containers and their status
+docker-compose ps
+
+# View live logs of all containers
+docker-compose logs -f
+
+# View logs of specific service (MySQL, PHP, etc.)
+docker-compose logs -f mysql
+docker-compose logs -f first_steps_php
+docker-compose logs -f phpmyadmin
+
+# View last 50 lines of logs
+docker-compose logs --tail=50
+```
+
+### Manage containers
+
+```powershell
+# Restart containers (keeps data)
+docker-compose restart
+
+# Restart specific container
+docker-compose restart mysql
+
+# Stop containers (keeps data - databases persist)
+docker-compose down
+
+# Stop and remove everything including data (full reset)
+docker-compose down -v
+
+# Rebuild and restart (if Dockerfile changed)
+docker-compose up --build
+```
+
+### Database operations
+
+```powershell
+# Access MySQL command line
+docker exec -it mysql mysql -u root -p
+# When prompted, password is: root
+
+# Execute SQL file in container
+docker exec -i mysql mysql -u root -proot < filename.sql
+
+# Backup database
+docker exec mysql mysqldump -u root -proot phpaccountant > backup.sql
+```
+
+### System cleanup
+
+```powershell
+# Remove unused Docker images and containers
+docker system prune -f
+
+# Remove unused volumes
+docker volume prune -f
+
+# Full cleanup (WARNING: removes everything)
+docker system prune -a -f
+```
+
+---
+
+## Troubleshooting
+
+### Issue: "Unknown database 'phpaccountant'"
+
+**Cause:** SQL initialization scripts didn't run properly.
+
+**Solution:**
+```powershell
+docker-compose down -v
+docker system prune -f
+docker-compose up --build -d
+Start-Sleep -Seconds 15
+docker-compose logs mysql
+```
+
+Verify you see the "Creating database phpaccountant" message.
+
+---
+
+### Issue: "Port 3000 already in use" or "Port 8080 already in use"
+
+**Cause:** Another service is using those ports.
+
+**Solution 1:** Stop the conflicting service and try again.
+
+**Solution 2:** Change ports in `docker-compose.yml`:
+```yaml
+php-apache:
+  ports:
+    - "3001:80"  # Changed from 3000:80
+    
+phpmyadmin:
+  ports:
+    - "8081:80"  # Changed from 8080:80
+```
+
+Then restart:
+```powershell
+docker-compose down
+docker-compose up -d
+```
+
+---
+
+### Issue: "MySQL connection timeout" or connection refused
+
+**Cause:** MySQL is still initializing or not responding.
+
+**Solution:**
+```powershell
+# Wait a bit more
+Start-Sleep -Seconds 15
+
+# Check MySQL logs
+docker-compose logs mysql
+
+# If still not ready, restart
+docker-compose restart mysql
+
+# Wait and check again
+Start-Sleep -Seconds 10
+docker-compose logs mysql | Select-Object -Last 10
+```
+
+Look for message: `ready for connections`
+
+---
+
+### Issue: "Composer install failed" or PHP errors
+
+**Cause:** Dependencies weren't installed properly.
+
+**Solution:**
+```powershell
+docker-compose down -v
+docker-compose up --build -d
+```
+
+The rebuild will reinstall all dependencies.
+
+---
+
+### Issue: Can't access http://localhost:3000
+
+**Cause:** PHP container might not be ready yet.
+
+**Solution:**
+```powershell
+# Check if container is running
+docker-compose ps
+
+# View PHP logs
+docker-compose logs first_steps_php
+
+# Restart PHP container
+docker-compose restart first_steps_php
+
+# Wait 10 seconds and try again
+Start-Sleep -Seconds 10
+```
+
+---
+
+## Project Files Related to Docker
+
+### Configuration Files
+
+1. **`Dockerfile`** - Defines the PHP/Apache Docker image
+   - Uses PHP 8.1.33 with Apache
+   - Installs MySQL extensions (mysqli, PDO)
+   - Installs Composer for dependency management
+   - Enables Apache rewrite module
+
+2. **`docker-compose.yml`** - Defines all services and their configuration
+   - **php-apache service**: Web server on port 3000
+   - **mysql service**: Database on port 3307
+   - **phpmyadmin service**: DB admin on port 8080
+   - **Volumes**: Maps source code and initialization scripts
+
+3. **`docker-entrypoint-initdb.d/`** - SQL initialization scripts
+   - `01-init.sql` - Creates phpaccountant database
+   - `02-init-thirdchallenge.sql` - Creates thirdchallenge database
+
+### Database Configuration
+
+The applications are configured to use Docker's MySQL service:
+
+- **Host**: `mysql` (Docker service name, not localhost)
+- **Port**: `3306` (internal Docker port)
+- **User**: `root`
+- **Password**: `root`
+
+These are configured in:
+- `Elkin/Challenge/FirstChallenge/config/app.json`
+- `Elkin/Challenge/ThirdChallenge/config/app.json`
+- `Elkin/stage6/config/app.json`
+
+---
+
+## For Team Members (After Git Pull)
+
+1. **After pulling new changes**, run:
+   ```powershell
+   docker-compose down -v
+   docker-compose up --build -d
+   ```
+
+2. **Wait for MySQL to initialize** (2-3 minutes):
+   ```powershell
+   Start-Sleep -Seconds 15
+   docker-compose logs mysql
+   ```

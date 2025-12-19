@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba42ea7b-ee4e-4545-a642-d79012920837" name="Changes" comment="Fix: problem docker src" />
+    <list default="true" id="ba42ea7b-ee4e-4545-a642-d79012920837" name="Changes" comment="Fix: problem docker src">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -130,7 +132,7 @@
       <workItem from="1765979765532" duration="43000" />
       <workItem from="1766092764118" duration="995000" />
       <workItem from="1766096369808" duration="758000" />
-      <workItem from="1766153431484" duration="2435000" />
+      <workItem from="1766153431484" duration="3078000" />
     </task>
     <task id="LOCAL-00001" summary="Adding singleton logic to manipulate DB connection">
       <option name="closed" value="true" />
