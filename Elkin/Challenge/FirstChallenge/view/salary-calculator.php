@@ -4,8 +4,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 if (!isset($_SESSION['isAuth']) || $_SESSION['isAuth'] !== true) {
-	header('Location: ./login/login.php');
-	exit;
+    header('Location: ./login/login.php');
+    exit;
 }
 
 $userId = (int) ($_SESSION['user_id'] ?? 0);
@@ -20,41 +20,41 @@ $result = null;
 // Normaliza detalles de horas extra desde POST
 $postedOvertime = [];
 if (isset($_POST['overtime_date']) && is_array($_POST['overtime_date'])) {
-	foreach ($_POST['overtime_date'] as $idx => $date) {
-		$postedOvertime[] = [
-			'date' => $date,
-			'start' => $_POST['overtime_start'][$idx] ?? null,
-			'end' => $_POST['overtime_end'][$idx] ?? null,
-		];
-	}
+    foreach ($_POST['overtime_date'] as $idx => $date) {
+        $postedOvertime[] = [
+            'date' => $date,
+            'start' => $_POST['overtime_start'][$idx] ?? null,
+            'end' => $_POST['overtime_end'][$idx] ?? null,
+        ];
+    }
 }
 
 // Acciones CRUD
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	$currentRecordId = isset($_POST['record_id']) ? (int) $_POST['record_id'] : $currentRecordId;
-	$grossSalaryInput = (float) ($_POST['gross_salary'] ?? 0);
+    $currentRecordId = isset($_POST['record_id']) ? (int) $_POST['record_id'] : $currentRecordId;
+    $grossSalaryInput = (float) ($_POST['gross_salary'] ?? 0);
 
-	if (isset($_POST['delete_record'])) {
-		SalaryRecord::delete((int) $_POST['delete_record'], $userId);
-		$flash = 'Registro eliminado.';
-		$currentRecordId = null;
-		$_SESSION['overtime_rows'] = 1;
-		$postedOvertime = [];
-	} else {
-		$shouldCalculate = isset($_POST['calculate']) || isset($_POST['save_record']) || isset($_POST['update_record']);
+    if (isset($_POST['delete_record'])) {
+        SalaryRecord::delete((int) $_POST['delete_record'], $userId);
+        $flash = 'Registro eliminado.';
+        $currentRecordId = null;
+        $_SESSION['overtime_rows'] = 1;
+        $postedOvertime = [];
+    } else {
+        $shouldCalculate = isset($_POST['calculate']) || isset($_POST['save_record']) || isset($_POST['update_record']);
 
-		if ($currentRecordId && isset($_POST['update_record'])) {
-			SalaryRecord::update($currentRecordId, $userId, $grossSalaryInput, $postedOvertime);
-			$flash = 'Record updated.';
-		} elseif (isset($_POST['save_record'])) {
-			$currentRecordId = SalaryRecord::create($userId, $grossSalaryInput, $postedOvertime);
-			$flash = 'Record saved.';
-		}
+        if ($currentRecordId && isset($_POST['update_record'])) {
+            SalaryRecord::update($currentRecordId, $userId, $grossSalaryInput, $postedOvertime);
+            $flash = 'Record updated.';
+        } elseif (isset($_POST['save_record'])) {
+            $currentRecordId = SalaryRecord::create($userId, $grossSalaryInput, $postedOvertime);
+            $flash = 'Record saved.';
+        }
 
-		if ($shouldCalculate) {
-			$result = computeSalaryResult($grossSalaryInput, $postedOvertime);
-		}
-	}
+        if ($shouldCalculate) {
+            $result = computeSalaryResult($grossSalaryInput, $postedOvertime);
+        }
+    }
 }
 
 // Load selected record for editing if applicable
@@ -62,38 +62,38 @@ $currentRecord = $currentRecordId ? SalaryRecord::findWithDetails($currentRecord
 
 // Ajustar cantidad de filas cuando se edita un registro guardado
 if (empty($_POST) && $currentRecord && isset($currentRecord['details'])) {
-	$detailsCount = max(1, count($currentRecord['details']));
-	$_SESSION['overtime_rows'] = $detailsCount;
-	$overtimeRows = $detailsCount;
+    $detailsCount = max(1, count($currentRecord['details']));
+    $_SESSION['overtime_rows'] = $detailsCount;
+    $overtimeRows = $detailsCount;
 }
 
 // Prepare data to fill out the form
 $formData = [
-	'gross_salary' => '',
-	'overtime_date' => array_fill(0, $overtimeRows, ''),
-	'overtime_start' => array_fill(0, $overtimeRows, ''),
-	'overtime_end' => array_fill(0, $overtimeRows, ''),
+    'gross_salary' => '',
+    'overtime_date' => array_fill(0, $overtimeRows, ''),
+    'overtime_start' => array_fill(0, $overtimeRows, ''),
+    'overtime_end' => array_fill(0, $overtimeRows, ''),
 ];
 
 if (!empty($postedOvertime)) {
-	$formData['gross_salary'] = $_POST['gross_salary'] ?? '';
-	foreach ($postedOvertime as $i => $row) {
-		$formData['overtime_date'][$i] = $row['date'] ?? '';
-		$formData['overtime_start'][$i] = $row['start'] ?? '';
-		$formData['overtime_end'][$i] = $row['end'] ?? '';
-	}
+    $formData['gross_salary'] = $_POST['gross_salary'] ?? '';
+    foreach ($postedOvertime as $i => $row) {
+        $formData['overtime_date'][$i] = $row['date'] ?? '';
+        $formData['overtime_start'][$i] = $row['start'] ?? '';
+        $formData['overtime_end'][$i] = $row['end'] ?? '';
+    }
 } elseif ($currentRecord) {
-	$formData['gross_salary'] = $currentRecord['gross_salary_input'];
-	foreach ($currentRecord['details'] as $i => $row) {
-		$formData['overtime_date'][$i] = $row['date'] ?? '';
-		$formData['overtime_start'][$i] = $row['start'] ?? '';
-		$formData['overtime_end'][$i] = $row['end'] ?? '';
-	}
+    $formData['gross_salary'] = $currentRecord['gross_salary_input'];
+    foreach ($currentRecord['details'] as $i => $row) {
+        $formData['overtime_date'][$i] = $row['date'] ?? '';
+        $formData['overtime_start'][$i] = $row['start'] ?? '';
+        $formData['overtime_end'][$i] = $row['end'] ?? '';
+    }
 }
 
 // Result from direct URL (without POST) using saved data
 if (!$result && $currentRecord && isset($currentRecord['details'])) {
-	$result = computeSalaryResult((float) $currentRecord['gross_salary_input'], $currentRecord['details']);
+    $result = computeSalaryResult((float) $currentRecord['gross_salary_input'], $currentRecord['details']);
 }
 
 // Listado de registros del usuario

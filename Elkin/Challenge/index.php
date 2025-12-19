@@ -93,21 +93,21 @@
 
 <div class="container">
 
-    
+
     <section class="week">
         <h2>Stage 0 to 5</h2>
 
         <div class="exercise">
             <span class="exercise-title">Challenge 1 — Salary Calculator</span>
-            <a href="FirstChallenge/view/salary-calculator.php">Open</a>
+            <a href="/Elkin/Challenge/FirstChallenge/view/salary-calculator.php">Open</a>
         </div>
         <div class="exercise">
             <span class="exercise-title">Challenge 2 — The fruit set logic</span>
-            <a href="SecondChallenge/viewFruitSet.php">Open</a>
+            <a href="/Elkin/Challenge/SecondChallenge/viewFruitSet.php">Open</a>
         </div>
         <div class="exercise">
             <span class="exercise-title">Challenge 3 — The toggle time attack </span>
-            <a href="./ThirdChallenge/challenge3.php">Open</a>
+            <a href="/Elkin/Challenge/ThirdChallenge/challenge3.php">Open</a>
         </div>
 
     </section>
