@@ -11,7 +11,7 @@ RUN a2enmod rewrite
 
 # Install composer dependencies for FirstChallenge
 WORKDIR /var/www/html/Elkin/Challenge/FirstChallenge
-RUN composer install --no-interaction --optimize-autoloader
+RUN composer install --no-interaction --optimize-autoloader 2>/dev/null || true
 
 # Reset working directory
 WORKDIR /var/www/html

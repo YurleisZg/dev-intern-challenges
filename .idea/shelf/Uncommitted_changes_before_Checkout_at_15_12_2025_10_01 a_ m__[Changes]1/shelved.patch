@@ -1,0 +1,179 @@
+Index: Elkin/Challenge/FirstChallenge/controllers/auth.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\nrequire_once __DIR__ . '/../config/DatabaseConn.php';\r\nrequire_once __DIR__ . '/../models/UserModel.php';\r\n\r\n\r\nfunction registerUser($username, $email, $password) {\r\n    return User::create($username, $email, $password);\r\n}\r\n\r\nfunction loginUser($email, $password) {\r\n    $user = User::verifyCredentials($email, $password);\r\n\r\n    if (!$user) {\r\n        return [\"success\" => false, \"message\" => \"Invalid Credentials\"];\r\n    }\r\n\r\n    if (session_status() !== PHP_SESSION_ACTIVE) {\r\n        session_start();\r\n    }\r\n    $_SESSION['user_id'] = $user['user_id'];\r\n    $_SESSION['isAuth'] = true;\r\n\r\n    return [\"success\" => true];\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Elkin/Challenge/FirstChallenge/controllers/auth.php b/Elkin/Challenge/FirstChallenge/controllers/auth.php
+--- a/Elkin/Challenge/FirstChallenge/controllers/auth.php	(revision 4432120de5c67085c3be44cb85c5bc4a4c0f69fb)
++++ b/Elkin/Challenge/FirstChallenge/controllers/auth.php	(date 1765810658790)
+@@ -1,25 +1,42 @@
+ <?php
+-require_once __DIR__ . '/../config/DatabaseConn.php';
+-require_once __DIR__ . '/../models/UserModel.php';
+ 
++namespace App\Controllers {
++    use App\Config\DatabaseConn;
++    use App\Models\User;
+ 
+-function registerUser($username, $email, $password) {
+-    return User::create($username, $email, $password);
+-}
++    function registerUser($username, $email, $password) {
++        return User::create($username, $email, $password);
++    }
+ 
+-function loginUser($email, $password) {
+-    $user = User::verifyCredentials($email, $password);
++    function loginUser($email, $password) {
++        $user = User::verifyCredentials($email, $password);
+ 
+-    if (!$user) {
+-        return ["success" => false, "message" => "Invalid Credentials"];
+-    }
++        if (!$user) {
++            return ["success" => false, "message" => "Invalid Credentials"];
++        }
+ 
+-    if (session_status() !== PHP_SESSION_ACTIVE) {
+-        session_start();
+-    }
+-    $_SESSION['user_id'] = $user['user_id'];
+-    $_SESSION['isAuth'] = true;
++        if (session_status() !== PHP_SESSION_ACTIVE) {
++            session_start();
++        }
++        $_SESSION['user_id'] = $user['user_id'];
++        $_SESSION['isAuth'] = true;
+ 
+-    return ["success" => true];
++        return ["success" => true];
++    }
+ }
++
++// Also define these functions in the global namespace for easy access
++namespace {
++    if (!function_exists('loginUser')) {
++        function loginUser($email, $password) {
++            return \App\Controllers\loginUser($email, $password);
++        }
++    }
++
++    if (!function_exists('registerUser')) {
++        function registerUser($username, $email, $password) {
++            return \App\Controllers\registerUser($username, $email, $password);
++        }
++    }
++}
+ 
+Index: Elkin/Challenge/FirstChallenge/models/SalaryRecordModel.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\n\r\nrequire_once __DIR__ . '/../config/DatabaseConn.php';\r\n\r\nclass SalaryRecord {\r\n    public static function create(int $userId, float $grossSalary, array $overtimeRecords): int {\r\n        $db = DatabaseConn::getInstance()->getConnection();\r\n\r\n        $db->beginTransaction();\r\n        try {\r\n            $stmt = $db->prepare(\r\n                'INSERT INTO salary_records (user_id, gross_salary_input, status) VALUES (?, ?, \"Draft\")'\r\n            );\r\n            $stmt->execute([$userId, $grossSalary]);\r\n            $recordId = (int) $db->lastInsertId();\r\n\r\n            self::insertDetails($db, $recordId, $overtimeRecords);\r\n\r\n            $db->commit();\r\n            return $recordId;\r\n        } catch (Exception $e) {\r\n            $db->rollBack();\r\n            throw $e;\r\n        }\r\n    }\r\n\r\n    public static function update(int $recordId, int $userId, float $grossSalary, array $overtimeRecords): bool {\r\n        $db = DatabaseConn::getInstance()->getConnection();\r\n        $db->beginTransaction();\r\n        try {\r\n            $update = $db->prepare(\r\n                'UPDATE salary_records SET gross_salary_input = ?, updated_at = NOW() WHERE record_id = ? AND user_id = ?'\r\n            );\r\n            $update->execute([$grossSalary, $recordId, $userId]);\r\n\r\n            $deleteDetails = $db->prepare('DELETE FROM salary_records_details WHERE record_id = ?');\r\n            $deleteDetails->execute([$recordId]);\r\n\r\n            self::insertDetails($db, $recordId, $overtimeRecords);\r\n\r\n            $db->commit();\r\n            return true;\r\n        } catch (Exception $e) {\r\n            $db->rollBack();\r\n            throw $e;\r\n        }\r\n    }\r\n\r\n    public static function delete(int $recordId, int $userId): bool {\r\n        $db = DatabaseConn::getInstance()->getConnection();\r\n        $stmt = $db->prepare('DELETE FROM salary_records WHERE record_id = ? AND user_id = ?');\r\n        return $stmt->execute([$recordId, $userId]);\r\n    }\r\n\r\n    public static function findWithDetails(int $recordId, int $userId): ?array {\r\n        $db = DatabaseConn::getInstance()->getConnection();\r\n        $stmt = $db->prepare('SELECT record_id, user_id, gross_salary_input, status, created_at, updated_at FROM salary_records WHERE record_id = ? AND user_id = ?');\r\n        $stmt->execute([$recordId, $userId]);\r\n        $record = $stmt->fetch(PDO::FETCH_ASSOC);\r\n        if (!$record) {\r\n            return null;\r\n        }\r\n\r\n        $detailStmt = $db->prepare('SELECT shift_date AS date, start_time AS start, end_time AS end FROM salary_records_details WHERE record_id = ? ORDER BY shift_date, start_time');\r\n        $detailStmt->execute([$recordId]);\r\n        $record['details'] = $detailStmt->fetchAll(PDO::FETCH_ASSOC);\r\n\r\n        return $record;\r\n    }\r\n\r\n    public static function listByUser(int $userId): array {\r\n        $db = DatabaseConn::getInstance()->getConnection();\r\n        $stmt = $db->prepare(\r\n            'SELECT r.record_id, r.gross_salary_input, r.status, r.created_at, r.updated_at, COUNT(d.detail_id) AS detail_count\r\n             FROM salary_records r\r\n             LEFT JOIN salary_records_details d ON d.record_id = r.record_id\r\n             WHERE r.user_id = ?\r\n             GROUP BY r.record_id, r.gross_salary_input, r.status, r.created_at, r.updated_at\r\n             ORDER BY r.updated_at DESC'\r\n        );\r\n        $stmt->execute([$userId]);\r\n        return $stmt->fetchAll(PDO::FETCH_ASSOC);\r\n    }\r\n\r\n    private static function insertDetails(\\PDO $db, int $recordId, array $overtimeRecords): void {\r\n        $insert = $db->prepare(\r\n            'INSERT INTO salary_records_details (record_id, shift_date, start_time, end_time) VALUES (?, ?, ?, ?)'\r\n        );\r\n\r\n        foreach ($overtimeRecords as $record) {\r\n            $date = $record['date'] ?? null;\r\n            $start = $record['start'] ?? null;\r\n            $end = $record['end'] ?? null;\r\n\r\n            if (empty($date) || empty($start) || empty($end)) {\r\n                continue;\r\n            }\r\n\r\n            $insert->execute([$recordId, $date, $start, $end]);\r\n        }\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Elkin/Challenge/FirstChallenge/models/SalaryRecordModel.php b/Elkin/Challenge/FirstChallenge/models/SalaryRecordModel.php
+--- a/Elkin/Challenge/FirstChallenge/models/SalaryRecordModel.php	(revision 4432120de5c67085c3be44cb85c5bc4a4c0f69fb)
++++ b/Elkin/Challenge/FirstChallenge/models/SalaryRecordModel.php	(date 1765810788770)
+@@ -1,6 +1,8 @@
+ <?php
+ 
+-require_once __DIR__ . '/../config/DatabaseConn.php';
++namespace App\Models;
++
++use App\Config\DatabaseConn;
+ 
+ class SalaryRecord {
+     public static function create(int $userId, float $grossSalary, array $overtimeRecords): int {
+@@ -18,7 +20,7 @@
+ 
+             $db->commit();
+             return $recordId;
+-        } catch (Exception $e) {
++        } catch (\Exception $e) {
+             $db->rollBack();
+             throw $e;
+         }
+@@ -40,7 +42,7 @@
+ 
+             $db->commit();
+             return true;
+-        } catch (Exception $e) {
++        } catch (\Exception $e) {
+             $db->rollBack();
+             throw $e;
+         }
+@@ -56,14 +58,14 @@
+         $db = DatabaseConn::getInstance()->getConnection();
+         $stmt = $db->prepare('SELECT record_id, user_id, gross_salary_input, status, created_at, updated_at FROM salary_records WHERE record_id = ? AND user_id = ?');
+         $stmt->execute([$recordId, $userId]);
+-        $record = $stmt->fetch(PDO::FETCH_ASSOC);
++        $record = $stmt->fetch(\PDO::FETCH_ASSOC);
+         if (!$record) {
+             return null;
+         }
+ 
+         $detailStmt = $db->prepare('SELECT shift_date AS date, start_time AS start, end_time AS end FROM salary_records_details WHERE record_id = ? ORDER BY shift_date, start_time');
+         $detailStmt->execute([$recordId]);
+-        $record['details'] = $detailStmt->fetchAll(PDO::FETCH_ASSOC);
++        $record['details'] = $detailStmt->fetchAll(\PDO::FETCH_ASSOC);
+ 
+         return $record;
+     }
+@@ -79,7 +81,7 @@
+              ORDER BY r.updated_at DESC'
+         );
+         $stmt->execute([$userId]);
+-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
++        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+     }
+ 
+     private static function insertDetails(\PDO $db, int $recordId, array $overtimeRecords): void {
+Index: Elkin/Challenge/FirstChallenge/view/login/login.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\nrequire_once '../../controllers/auth.php';\r\ninclude '../html-templates.php';\r\nrequire_once __DIR__ . '/../../config/path.php';\r\n$css_path = AUTH_CSS;\r\n\r\n$error = \"\";\r\n\r\nif ($_SERVER['REQUEST_METHOD'] === 'POST') {\r\n\r\n    $result = loginUser($_POST['email'], $_POST['password']);\r\n\r\n    if ($result['success']) {\r\n        header('Location: ../salary-calculator.php');\r\n        exit;\r\n    } else {\r\n        $error = $result['message'];\r\n    }\r\n}\r\n?>\r\n<?=template_header('Login', $css_path)?>\r\n<?php if (!empty($error)): ?>\r\n    <p style=\"color:red;\"><?php echo $error; ?></p>\r\n<?php endif; ?>\r\n\r\n<div class=\"auth-container\">\r\n    <h2>Login</h2>\r\n\r\n    <form method=\"POST\">\r\n\r\n        <div class=\"auth-field\">\r\n            <label>Email</label>\r\n            <input type=\"email\" name=\"email\" required />\r\n        </div>\r\n\r\n        <div class=\"auth-field\">\r\n            <label>Password</label>\r\n            <input type=\"password\" name=\"password\" required />\r\n        </div>\r\n\r\n        <button type=\"submit\">Log in</button>\r\n    </form>\r\n\r\n    <div class=\"auth-footer\">\r\n        ¿Don't  have an account? <a href=\"register.php\">Sign Up</a>\r\n    </div>\r\n</div>\r\n\r\n<?=template_footer()?>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Elkin/Challenge/FirstChallenge/view/login/login.php b/Elkin/Challenge/FirstChallenge/view/login/login.php
+--- a/Elkin/Challenge/FirstChallenge/view/login/login.php	(revision 4432120de5c67085c3be44cb85c5bc4a4c0f69fb)
++++ b/Elkin/Challenge/FirstChallenge/view/login/login.php	(date 1765810549014)
+@@ -1,7 +1,8 @@
+ <?php
+-require_once '../../controllers/auth.php';
++require_once '../../bootstrap.php';
+ include '../html-templates.php';
+ require_once __DIR__ . '/../../config/path.php';
++
+ $css_path = AUTH_CSS;
+ 
+ $error = "";
+Index: Elkin/Challenge/FirstChallenge/view/html-templates.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\r\nrequire_once __DIR__ . '/../config/path.php';\r\nfunction template_header($title,$css_path, $css_path1='') {\r\n    if (session_status() !== PHP_SESSION_ACTIVE) {\r\n        session_start();\r\n    }\r\n    $base = BASE_URL;\r\n    $challengeUrl = CHALLENGE_URL;\r\n    $isAuth = isset($_SESSION['isAuth']) && $_SESSION['isAuth'] === true;\r\n    \r\n    echo <<<EOT\r\n<!DOCTYPE html>\r\n<html>\r\n\t<head>\r\n\t\t<meta charset=\"utf-8\">\r\n\t\t<title>$title</title>\r\n\t\t<link rel=\"stylesheet\" href=\"$base/$css_path\">\r\n\t\t<link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.7.1/css/all.css\">\r\n\t\t<link rel=\"stylesheet\" href=\"$base/$css_path1\">\r\n\t</head>\r\n\t<body>\r\n    <nav class=\"navtop\">\r\n    \t<div>\r\n    \t\t<h1>Challenge 1 - Salary Calculator</h1>\r\n    \t\t<a href=\"$challengeUrl\"><i class=\"fas fa-graduation-cap\"></i>Dashboard</a>\r\nEOT;\r\n    if ($isAuth) {\r\n        echo <<<EOT\r\n            <a href=\"{$base}view/login/logout.php\"><i class=\"fas fa-sign-out-alt\"></i>Logout</a>\r\nEOT;\r\n    }\r\n    echo <<<EOT\r\n    \t</div>\r\n    </nav>\r\nEOT;\r\n}\r\nfunction template_footer() {\r\n    echo <<<EOT\r\n    </body>\r\n</html>\r\nEOT;\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Elkin/Challenge/FirstChallenge/view/html-templates.php b/Elkin/Challenge/FirstChallenge/view/html-templates.php
+--- a/Elkin/Challenge/FirstChallenge/view/html-templates.php	(revision 4432120de5c67085c3be44cb85c5bc4a4c0f69fb)
++++ b/Elkin/Challenge/FirstChallenge/view/html-templates.php	(date 1765810549017)
+@@ -1,4 +1,15 @@
+ <?php
++
++// Determine the path to bootstrap based on where this file is being called from
++$bootstrapPath = __DIR__ . '/../bootstrap.php';
++if (!file_exists($bootstrapPath)) {
++    $bootstrapPath = dirname(dirname(__FILE__)) . '/bootstrap.php';
++}
++
++if (file_exists($bootstrapPath)) {
++    require_once $bootstrapPath;
++}
++
+ require_once __DIR__ . '/../config/path.php';
+ function template_header($title,$css_path, $css_path1='') {
+     if (session_status() !== PHP_SESSION_ACTIVE) {

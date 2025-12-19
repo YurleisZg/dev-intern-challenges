@@ -1,8 +1,8 @@
 {
   "db": {
     "user": "root",
-    "password": "",
-    "host": "127.0.0.1",
+    "password": "root",
+    "host": "mysql",
     "port": "3306",
     "dbname": "todos"
   }
