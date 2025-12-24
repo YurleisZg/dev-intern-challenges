@@ -62,7 +62,7 @@
     <p><strong>Namespace:</strong> fruit::index</p>
     <p><strong>Controller:</strong> FruitSetLogic\Http\Controllers</p>
 
-    <a href="{{ route('dashboard')}}" class="btn">Volver al Dashboard</a>
+    <a href="{{ route('elkin.dashboard')}}" class="btn">Volver al Dashboard</a>
 </div>
 </body>
 </html>

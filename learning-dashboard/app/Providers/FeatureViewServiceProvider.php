@@ -21,7 +21,7 @@ class FeatureViewServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $featuresPath = app_path('Features');
-        foreach (glob("$featuresPath/*/Views", GLOB_ONLYDIR) as $viewPath) {
+        foreach (glob("$featuresPath/Elkin/*/Views", GLOB_ONLYDIR) as $viewPath) {
             $featureFolder = basename(dirname($viewPath));
             $namespace = Str::kebab($featureFolder);
 

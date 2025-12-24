@@ -102,8 +102,8 @@
 <body>
 <div class="container">
     <h1>{{ $titulo ?? 'SALARY TEMPLATE' }}</h1>
-    <a href="{{ route('dashboard')}}" class="btn">Volver al Dashboard</a>
-    <a href="{{ route('dashboard')}}" class="btn">Volver al Dashboard</a>
+    <a href="{{ route('elkin.dashboard')}}" class="btn">Volver al Dashboard</a>
+    <a href="{{ route('elkin.dashboard')}}" class="btn">Volver al Dashboard</a>
     <div class="alert alert-info">
         <strong>Fecha actual:</strong> {{ date('d/m/Y H:i:s') }}
     </div>
