@@ -4,9 +4,12 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WelcomeController;
+use Illuminate\Http\Request;
+
 $FeaturesPath = app_path('Features');
 
 Route::get('/', WelcomeController::class)->name('home');
+
 
 Route::prefix('Elkin')
     ->as('elkin.')
@@ -29,12 +32,13 @@ Route::prefix('Elkin')
                     });
             }
         });
-    });
+});
 
 Route::prefix('Yurleis')
     ->as('yurleis.')
     ->group(function () {
-        Route::get('/',[DashboardController::class,'indexYurleis'])->name('dashboardYurleis');
+        Route::get('/',[DashboardController::class,'indexYurleis'])
+        ->middleware('auth:yurleis')->name('dashboardYurleis');
         Route::prefix('challenges')
             ->as('challenges.')
             ->group(function () {
