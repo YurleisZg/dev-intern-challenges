@@ -9,7 +9,7 @@ class LoginController
 {
     public function show()
     {
-        return view('auth::login'); 
+        return view('yurleis-auth::login'); 
     }
 
     public function store(Request $request)

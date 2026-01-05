@@ -12,7 +12,7 @@ class RegisterController
 {
     public function show()
     {
-        return view('auth::register'); 
+        return view('yurleis-auth::register'); 
     }
 
     public function store(Request $request)
