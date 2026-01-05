@@ -30,3 +30,25 @@ Route::prefix('Elkin')
             }
         });
     });
+
+Route::prefix('Yurleis')
+    ->as('yurleis.')
+    ->group(function () {
+        Route::get('/',[DashboardController::class,'indexYurleis'])->name('dashboardYurleis');
+        Route::prefix('challenges')
+            ->as('challenges.')
+            ->group(function () {
+
+            foreach (glob(app_path('Features/Yurleis/*/routes.php')) as $routeFile) {
+
+                $featureName = basename(dirname($routeFile));
+                $slug = Str::kebab($featureName);
+
+                Route::prefix($slug)
+                    ->as($slug . '.')
+                    ->group(function () use ($routeFile) {
+                        require $routeFile;
+                    });
+            }
+        });
+    });

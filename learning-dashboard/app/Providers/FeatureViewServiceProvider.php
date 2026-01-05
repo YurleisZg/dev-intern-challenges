@@ -27,5 +27,12 @@ class FeatureViewServiceProvider extends ServiceProvider
 
             $this->loadViewsFrom($viewPath, $namespace);
         }
+
+        $featuresPath = app_path('Features');
+        foreach (glob("$featuresPath/Yurleis/*/Views", GLOB_ONLYDIR) as $viewPath) {
+            $featureFolder = basename(dirname($viewPath));
+            $namespace = Str::kebab($featureFolder);
+            $this->loadViewsFrom($viewPath, $namespace);
+        }
     }
 }
