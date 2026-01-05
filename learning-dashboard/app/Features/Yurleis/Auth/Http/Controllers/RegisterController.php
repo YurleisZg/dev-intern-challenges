@@ -2,10 +2,11 @@
 
 namespace App\Features\Yurleis\Auth\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Yurleis\User as YurleisUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class RegisterController
 {
@@ -18,17 +19,17 @@ class RegisterController
     {
         $data = $request->validate([
             'name'                  => ['required', 'string', 'max:255'],
-            'email'                 => ['required', 'email', 'max:255', 'unique:users,email'],
+            'email'                 => ['required', 'email', 'max:255', Rule::unique('yurleis_users','email')],
             'password'              => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $user = User::create([
+        $user = YurleisUser::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => Hash::make($data['password']), 
         ]);
 
-        Auth::login($user);
+        Auth::guard('yurleis')->login($user);
         $request->session()->regenerate();
 
         return redirect()->route('yurleis.dashboardYurleis');

@@ -10,7 +10,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'yurleis_users'; // <- tabla separada
+    protected $table = 'yurleis_users'; 
 
     protected $fillable = ['name', 'email', 'password'];
 
