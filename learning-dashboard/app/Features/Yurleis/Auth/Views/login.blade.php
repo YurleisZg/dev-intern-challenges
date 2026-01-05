@@ -28,6 +28,8 @@
           <label class="text-sm font-medium">Password</label>
           <input name="password" placeholder="............"
           type="password" class="mt-1 w-full rounded-lg border p-2" required />
+          <span class="text-xs text-gray-600">Must be at least 8 characters.</span>
+
         </div>
 
         <button class="w-full rounded-lg bg-black text-white py-2 font-semibold">
