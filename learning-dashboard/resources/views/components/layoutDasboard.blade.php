@@ -41,7 +41,7 @@
 </main>
 
 <footer class="mt-auto py-8 text-center">
-    <p class="text-sm text-gray-500">© 2025 Learning Dashboard - Elkin Vasquez</p>
+    <p class="text-sm text-gray-500">© {{ date('Y') }} Learning Dashboard</p>
 </footer>
 
 </body>

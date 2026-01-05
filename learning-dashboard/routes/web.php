@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WelcomeController;
 $FeaturesPath = app_path('Features');
 
+Route::get('/', WelcomeController::class)->name('home');
 
 Route::prefix('Elkin')
     ->as('elkin.')
