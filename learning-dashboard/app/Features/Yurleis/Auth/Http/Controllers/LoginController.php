@@ -21,7 +21,7 @@ class LoginController
 
         $remember = $request->boolean('remember');
 
-        if (!Auth::guard('yurleis')->attempt($credentials, $remember)) {
+        if (!Auth::guard('yurleis')->attempt($credentials)) {
             return back()
                 ->withInput($request->only('email'))
                 ->withErrors(['email' => 'Credenciales inválidas.']);
