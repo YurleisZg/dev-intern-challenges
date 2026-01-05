@@ -6,6 +6,7 @@ pide el roadmap al service
 lo entrega a la vista*/
 namespace App\Http\Controllers;
 use App\Services\DashboardService;
+use App\Services\DashboardYurleisService;
 use Illuminate\Http\Request;
 
 
@@ -14,14 +15,20 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(DashboardService $dashboardService)
+    public function index(DashboardService $dashboardService) 
     {
         $stages = $dashboardService->getRoadmap();
         return view('dashboard', ['stages' => $stages]);
     }
 
+    public function indexYurleis(DashboardYurleisService $dashboardYurleisService) 
+    {
+        $stages= $dashboardYurleisService->getRoadmap();
+        return view('dashboardYurleis', ['stages' => $stages]);
+    }
+
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resou   rce.
      */
     public function create()
     {
