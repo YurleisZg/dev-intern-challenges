@@ -12,13 +12,13 @@ class DashboardYurleisService
     {
         $stages = new Stage('Challenges');
         $stages->addChallenge(
-            new Challenge('Salary Calculator', 'Salary calculator with overtime support', 'yurleis.challenges.salary-calculator.'),
+            new Challenge('Salary Calculator', 'Salary calculator with overtime support', 'yurleis.challenges.salary-calculator.index'),
         );
         $stages->addChallenge(
-            new Challenge('Fruit Logic', 'An interactive mini-game with two fruit baskets (Basket A and Basket B)', 'yurleis.challenges.salary-calculator.'),
+            new Challenge('Fruit Logic', 'An interactive mini-game with two fruit baskets (Basket A and Basket B)', 'yurleis.challenges.salary-calculator.index'),
         );
         $stages->addChallenge(
-            new Challenge('Toggle Time Attack', 'Game where you quickly switch elements on and off before time runs out', 'yurleis.challenges.salary-calculator.')
+            new Challenge('Toggle Time Attack', 'Game where you quickly switch elements on and off before time runs out', 'yurleis.challenges.salary-calculator.index')
         );
 
         return [
