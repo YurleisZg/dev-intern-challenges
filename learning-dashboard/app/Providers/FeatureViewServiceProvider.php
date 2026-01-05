@@ -21,18 +21,19 @@ class FeatureViewServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $featuresPath = app_path('Features');
-        foreach (glob("$featuresPath/Elkin/*/Views", GLOB_ONLYDIR) as $viewPath) {
-            $featureFolder = basename(dirname($viewPath));
-            $namespace = Str::kebab($featureFolder);
 
-            $this->loadViewsFrom($viewPath, $namespace);
-        }
+        $groups = [
+            'Elkin' => 'elkin',
+            'Yurleis' => 'yurleis',
+        ];
 
-        $featuresPath = app_path('Features');
-        foreach (glob("$featuresPath/Yurleis/*/Views", GLOB_ONLYDIR) as $viewPath) {
-            $featureFolder = basename(dirname($viewPath));
-            $namespace = Str::kebab($featureFolder);
-            $this->loadViewsFrom($viewPath, $namespace);
-        }
+       foreach ($groups as $groupDir => $groupNs) {
+            foreach (glob("$featuresPath/$groupDir/*/Views", GLOB_ONLYDIR) as $viewPath) {
+                $featureFolder = basename(dirname($viewPath));
+                $featureNs = Str::kebab($featureFolder);
+
+                $this->loadViewsFrom($viewPath, "{$groupNs}-{$featureNs}");
+            }
     }
+}
 }
