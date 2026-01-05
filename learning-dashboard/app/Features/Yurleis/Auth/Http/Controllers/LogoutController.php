@@ -9,12 +9,11 @@ class LogoutController
 {
     public function __invoke(Request $request)
     {
-        Auth::logout();
+        Auth::guard('yurleis')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // vuelve al login del feature
         return redirect()->route('yurleis.challenges.auth.login');
     }
 }
