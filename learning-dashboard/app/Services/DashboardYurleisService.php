@@ -18,7 +18,7 @@ class DashboardYurleisService
             new Challenge('Fruit Logic', 'An interactive mini-game with two fruit baskets (Basket A and Basket B)', 'yurleis.challenges.salary-calculator.index'),
         );
         $stages->addChallenge(
-            new Challenge('Toggle Time Attack', 'Game where you quickly switch elements on and off before time runs out', 'yurleis.challenges.salary-calculator.index')
+            new Challenge('Toggle Time Attack', 'Game where you quickly switch elements on and off before time runs out', 'yurleis.challenges.toggle-time-attack.play')
         );
 
         return [
