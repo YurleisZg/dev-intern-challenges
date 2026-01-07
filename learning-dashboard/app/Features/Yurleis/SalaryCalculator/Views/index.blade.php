@@ -4,18 +4,18 @@
 
 <x-layoutDasboard>
     <a href="/Yurleis" 
-      class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 mb-4">
-      ← Regresar
+      class="px-4 py-1 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 mb-4">
+      ← Back
     </a>
   <div class="flex items-start justify-between mb-6 mt-4">
     <div>
       <h1 class="text-2xl font-bold">Salary Calculator</h1>
-      <p class="text-gray-600">Guarda y administra tus cálculos (bono fijo $300).</p>
+      <p class="text-gray-600">Save and manage your calculations (fixed bonus $300).</p>
     </div>
 
     <a href="{{ route('yurleis.challenges.salary-calculator.create') }}"
        class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">
-      + Nuevo cálculo
+      + New Calculation
     </a>
   </div>
 
@@ -27,11 +27,11 @@
     <table class="w-full text-sm">
       <thead class="bg-gray-50 text-gray-700">
         <tr>
-          <th class="text-left p-3">Fecha</th>
+          <th class="text-left p-3">Date</th>
           <th class="text-left p-3">Gross</th>
           <th class="text-left p-3">Overtime</th>
           <th class="text-left p-3">Total</th>
-          <th class="text-right p-3">Acciones</th>
+          <th class="text-right p-3">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -44,17 +44,17 @@
             <td class="p-3">
               <div class="flex justify-end gap-2">
                 <a class="px-3 py-1.5 border rounded-lg hover:bg-gray-50"
-                   href="{{ route('yurleis.challenges.salary-calculator.show', $r->id) }}">Ver</a>
+                   href="{{ route('yurleis.challenges.salary-calculator.show', $r->id) }}">View</a>
 
                 <a class="px-3 py-1.5 border rounded-lg hover:bg-gray-50"
-                   href="{{ route('yurleis.challenges.salary-calculator.edit', $r->id) }}">Editar</a>
+                   href="{{ route('yurleis.challenges.salary-calculator.edit', $r->id) }}">Edit</a>
 
                 <form method="POST" action="{{ route('yurleis.challenges.salary-calculator.destroy', $r->id) }}"
-                      onsubmit="return confirm('¿Eliminar este registro?')">
+                      onsubmit="return confirm('Delete this record?')">
                   @csrf
                   @method('DELETE')
                   <button class="px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700">
-                    Eliminar
+                    Delete
                   </button>
                 </form>
               </div>
@@ -62,7 +62,7 @@
           </tr>
         @empty
           <tr>
-            <td class="p-4 text-gray-600" colspan="5">No tienes registros aún. Crea tu primer cálculo.</td>
+            <td class="p-4 text-gray-600" colspan="5">Don't have records yet. Create your first calculation.</td>
           </tr>
         @endforelse
       </tbody>

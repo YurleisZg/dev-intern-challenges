@@ -10,11 +10,11 @@
 <x-layoutDasboard>
   <div class="flex items-start justify-between mb-6">
     <div>
-      <h1 class="text-2xl font-bold">{{ $isEdit ? 'Editar cálculo' : 'Nuevo cálculo' }}</h1>
-      <p class="text-gray-600">Bono fijo: <b>$300</b>. Puedes guardar aunque no tengas horas extra.</p>
+      <h1 class="text-2xl font-bold">{{ $isEdit ? 'Edit Calculation' : 'New Calculation' }}</h1>
+      <p class="text-gray-600">Fixed bonus: <b>$300</b>. You can save even if you don't have overtime hours.</p>
     </div>
 
-    <a href="{{ $back }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Volver</a>
+    <a href="{{ $back }}" class="px-4 py-1 border rounded-lg hover:bg-gray-50">Back</a>
   </div>
 
   @if($errors->any())
@@ -40,7 +40,7 @@
 
     <div class="bg-white border rounded-xl p-5">
       <div class="flex items-center justify-between mb-3">
-        <h2 class="text-lg font-semibold">Overtime Shifts (opcional)</h2>
+        <h2 class="text-lg font-semibold">Overtime Shifts (optional)</h2>
         <button type="button" id="addShift"
                 class="px-3 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">
           + Add shift
@@ -54,7 +54,7 @@
               <th class="text-left p-2">Date</th>
               <th class="text-left p-2">Start</th>
               <th class="text-left p-2">End</th>
-              <th class="text-right p-2">Acción</th>
+              <th class="text-right p-2">Action</th>
             </tr>
           </thead>
           <tbody id="shiftsBody">
@@ -87,21 +87,20 @@
                 </td>
               </tr>
             @empty
-              {{-- inicia sin filas --}}
             @endforelse
           </tbody>
         </table>
       </div>
 
       <p class="text-xs text-gray-500 mt-3">
-        Puedes dejarlo vacío. Si una fila está incompleta, se ignora automáticamente.
+        Add your overtime shifts here. You can add multiple shifts and remove them as needed.
       </p>
     </div>
 
     <div class="flex justify-end gap-2">
-      <a href="{{ $back }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Cancelar</a>
+      <a href="{{ $back }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Cancel</a>
       <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-        {{ $isEdit ? 'Actualizar' : 'Calcular y Guardar' }}
+        {{ $isEdit ? 'Update' : 'Calculate and Save' }}
       </button>
     </div>
   </form>
