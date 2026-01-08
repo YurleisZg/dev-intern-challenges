@@ -44,6 +44,10 @@ return [
             'driver' => 'session',
             'provider' => 'yurleis_users',
         ],
+        'elkin' => [
+            'driver' => 'session',
+            'provider' => 'elkin_users',
+        ],
     ],
 
     /*
@@ -67,6 +71,10 @@ return [
          'yurleis_users' => [
             'driver' => 'eloquent',
             'model' => App\Models\Yurleis\User::class,
+        ],
+        'elkin_users' => [
+            'driver' => 'eloquent',
+            'model' =>  App\Models\Elkin\ElkinUser::class,
         ],
 
         // 'users' => [
@@ -96,13 +104,19 @@ return [
 
     'passwords' => [
         'users' => [
-            'provider' => 'users',
+            'provider' => 'elkin_users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,
         ],
         'yurleis_users' => [
             'provider' => 'yurleis_users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'elkin_users' => [
+            'provider' => 'elkin_users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

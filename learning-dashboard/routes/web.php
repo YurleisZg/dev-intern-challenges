@@ -14,8 +14,8 @@ Route::get('/', WelcomeController::class)->name('home');
 Route::prefix('Elkin')
     ->as('elkin.')
     ->group(function () {
-        Route::get('/',[DashboardController::class,'index'])->name('dashboard');
-        
+        Route::get('/',[DashboardController::class,'index'])->middleware('auth:elkin')->name('dashboard');
+
         Route::prefix('challenges')
             ->as('challenges.')
             ->group(function () {

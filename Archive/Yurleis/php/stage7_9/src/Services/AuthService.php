@@ -1,7 +1,7 @@
 <?php
 namespace App\Services;
 
-use App\Models\User;
+use App\Models\Elkin\ElkinUser;
 use App\Repositories\UserRepository;
 
 class AuthService
@@ -34,7 +34,7 @@ class AuthService
         }
 
         // Create user
-        $user = new User();
+        $user = new ElkinUser();
         $user->setId(uniqid('user_', true));
         $user->setName($name);
         $user->setEmail($email);
