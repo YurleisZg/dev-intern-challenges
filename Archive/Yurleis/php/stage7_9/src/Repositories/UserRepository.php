@@ -2,10 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
 use App\config\Database;
+use App\Models\Elkin\ElkinUser;
 use PDO;
-use PDOException;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -16,7 +15,7 @@ class UserRepository implements UserRepositoryInterface
         $this->connection = Database::getInstance()->getConnection();
     }
 
-    public function create(User $user): User
+    public function create(ElkinUser $user): ElkinUser
     {
         $sql = "INSERT INTO users ( name, email, password) VALUES (:name, :email, :password)";
         $stmt = $this->connection->prepare($sql);
@@ -28,7 +27,7 @@ class UserRepository implements UserRepositoryInterface
         return $user;
     }
 
-    public function update(User $user): bool
+    public function update(ElkinUser $user): bool
     {
         $sql = "UPDATE users SET name = :name, email = :email, password = :password WHERE id = :id";
         $stmt = $this->connection->prepare($sql);
@@ -55,13 +54,13 @@ class UserRepository implements UserRepositoryInterface
         
         $users = [];
         foreach ($usersData as $data) {
-            $user = new User((int)$data['id'], $data['name'], $data['email'], $data['password']);
+            $user = new ElkinUser((int)$data['id'], $data['name'], $data['email'], $data['password']);
             $users[] = $user;
         }
         return $users;
     }
 
-    public function findByEmail(string $email): ?User
+    public function findByEmail(string $email): ?ElkinUser
     {
         $sql = "SELECT * FROM users WHERE email = :email";
         $stmt = $this->connection->prepare($sql);
@@ -70,7 +69,7 @@ class UserRepository implements UserRepositoryInterface
         $data = $stmt->fetch();
 
         if ($data) {
-            return new User((int)$data['id'], $data['name'], $data['email'], $data['password']);
+            return new ElkinUser((int)$data['id'], $data['name'], $data['email'], $data['password']);
         }
         return null;
     }
