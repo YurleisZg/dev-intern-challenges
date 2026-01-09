@@ -21,7 +21,7 @@ class FruitSetController
         $basketA = $request->session()->get('fruit_basket_A', []);
         $basketB = $request->session()->get('fruit_basket_B', []);
 
-        return view('fruit-set-logic::index', [
+        return view('elkin-fruit-set-logic::index', [
             'basketA' => $basketA,
             'basketB' => $basketB,
             'fruits' => self::FRUITS,
@@ -111,7 +111,7 @@ class FruitSetController
                 break;
         }
 
-        return view('fruit-set-logic::index', [
+        return view('elkin-fruit-set-logic::index', [
             'basketA' => $basketA,
             'basketB' => $basketB,
             'fruits' => self::FRUITS,
