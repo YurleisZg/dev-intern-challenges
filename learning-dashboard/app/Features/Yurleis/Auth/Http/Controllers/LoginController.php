@@ -9,7 +9,7 @@ class LoginController
 {
     public function show()
     {
-        return view('auth::login'); 
+        return view('yurleis-auth::login'); 
     }
 
     public function store(Request $request)
@@ -29,7 +29,6 @@ class LoginController
 
         $request->session()->regenerate();
 
-        // Redirige al dashboard Yurleis (o intended si venías de una ruta protegida)
         return redirect()->intended(route('yurleis.dashboardYurleis'));
     }
 }

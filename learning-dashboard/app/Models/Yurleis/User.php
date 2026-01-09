@@ -16,6 +16,11 @@ class User extends Authenticatable
 
     protected $hidden = ['password', 'remember_token'];
 
+    public function salaryRecords()
+    {
+        return $this->hasMany(\App\Models\Yurleis\SalaryRecord::class, 'yurleis_user_id');
+    }
+
     protected function casts(): array
     {
         return [
