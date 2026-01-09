@@ -1,9 +1,19 @@
 <x-layoutDasboard>
-    <div class="mb-12">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Developer Training Dashboard</h1>
-        <p class="text-base text-gray-600">Track the weekly challenges and coding progress</p>
+    <div class="mb-6"></div>
     </div>
-
+    <div class="mb-12 flex justify-between items-start">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome!</h1>
+            <p class="text-base text-gray-600">Track the weekly challenges and coding progress</p>
+        </div>
+        <form method="POST" action="{{ route('elkin.challenges.auth.logout') }}">
+            @csrf
+            <button type="submit"
+                    class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
+                Logout
+            </button>
+        </form>
+    </div>
 
     @foreach($stages as $stage)
         <section class="mb-8">
