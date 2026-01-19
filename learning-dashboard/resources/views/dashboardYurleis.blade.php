@@ -3,8 +3,8 @@
 </div>
     <div class="mb-12 flex justify-between items-start">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome!</h1>
-            <p class="text-base text-gray-600">Track the weekly challenges and coding progress</p>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome {{ Auth::guard('yurleis')->user()->name }}!</h1>
+            <p class="text-base text-gray-600">Follow Yurleis Zuluaga's weekly challenges and coding progress</p>
         </div>
         <form method="POST" action="{{ route('yurleis.challenges.auth.logout') }}">
             @csrf

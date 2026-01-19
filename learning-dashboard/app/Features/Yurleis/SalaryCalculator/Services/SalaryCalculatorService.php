@@ -54,7 +54,7 @@ class SalaryCalculatorService
     private function calcShift(string $date, string $start, string $end, float $hourlyRate): array
     {
         $startAt = CarbonImmutable::parse("$date $start");
-        $endAt   = CarbonImmutable::parse("$date $end");
+        $endAt = CarbonImmutable::parse("$date $end");
 
         // If it crosses midnight
         if ($endAt <= $startAt) {
@@ -62,27 +62,59 @@ class SalaryCalculatorService
         }
 
         $overtimeMinutes = 0;
-        $nightMinutes = 0;
-        $sundayMinutes = 0;
+        $nightMinutes = 0;   // night overtime minutes (we only use it for Sunday night extra)
+        $sundayMinutes = 0;  // overtime minutes that fall on Sunday
+
+        $weekdayMinutes = 0; // Mon–Fri overtime minutes (always +25%)
+        $saturdayMinutes = 0; // Saturday overtime minutes (always +25%)
 
         for ($t = $startAt; $t < $endAt; $t = $t->addMinute()) {
-            if ($this->isOvertimeMinute($t)) {
-                $overtimeMinutes++;
-
-                if ($this->isNightMinute($t)) $nightMinutes++;
-                if ($t->isSunday()) $sundayMinutes++;
+            if (!$this->isOvertimeMinute($t)) {
+                continue;
             }
+
+            $overtimeMinutes++;
+
+            if ($t->isSunday()) {
+                $sundayMinutes++;
+
+                // Sunday night gets extra +25%
+                if ($this->isNightMinute($t)) {
+                    $nightMinutes++;
+                }
+
+                continue;
+            }
+
+            if ($t->isSaturday()) {
+                $saturdayMinutes++;
+                continue;
+            }
+
+            // Mon–Fri
+            $weekdayMinutes++;
         }
 
         $isSunday = $sundayMinutes > 0;
 
-        //base overtime + sunday + night
-        $multiplier = 1.0;
-        if ($isSunday) $multiplier += 0.50;
-        if ($nightMinutes > 0) $multiplier += 0.25;
+        // For Sunday we split day vs night
+        // IMPORTANT: dayMinutes must be based on Sunday minutes, not total overtime minutes
+        $dayMinutes = max(0, $sundayMinutes - $nightMinutes);
 
-        $hours = $overtimeMinutes / 60.0;
-        $total = $hours * $hourlyRate * $multiplier;
+        $dayMultiplier = 1.0 + ($isSunday ? 0.50 : 0.0); // Sunday day = 1.50
+        $nightMultiplier = $dayMultiplier + 0.25;        // Sunday night = 1.75
+
+        // Weekday + Saturday overtime is always +25%
+        $multiplier = 1.25;
+
+        $dayHours = $dayMinutes / 60.0;
+        $nightHours = $nightMinutes / 60.0;
+        $hours = ($weekdayMinutes + $saturdayMinutes) / 60.0;
+
+        $total =
+            ($hours * $hourlyRate * $multiplier) +
+            ($dayHours * $hourlyRate * $dayMultiplier) +
+            ($nightHours * $hourlyRate * $nightMultiplier);
 
         return [
             'date' => $date,
@@ -90,14 +122,15 @@ class SalaryCalculatorService
             'end_time' => $end,
 
             'overtime_minutes' => $overtimeMinutes,
-            'night_overtime_minutes' => $nightMinutes,
+            'night_overtime_minutes' => $nightMinutes, // Sunday night minutes
             'is_sunday' => $isSunday,
 
             'hourly_rate' => $hourlyRate,
-            'multiplier' => $multiplier,
+            'multiplier' => $isSunday ? 1.50 : $multiplier, // for UI (Sunday base)
             'total' => $this->floor2($total),
         ];
     }
+
 
     /**
      * Rules:
@@ -107,7 +140,8 @@ class SalaryCalculatorService
      */
     private function isOvertimeMinute(CarbonImmutable $t): bool
     {
-        if ($t->isSunday()) return true;
+        if ($t->isSunday())
+            return true;
 
         $hhmm = $t->format('H:i');
 

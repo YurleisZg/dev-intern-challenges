@@ -10,9 +10,8 @@
   <div class="flex items-start justify-between mb-6 mt-4">
     <div>
       <h1 class="text-2xl font-bold">Salary Calculator</h1>
-      <p class="text-gray-600">Save and manage your calculations (fixed bonus $300).</p>
+      <p class="text-gray-600">Enter your gross monthly salary (overtime optional) to estimate your net pay, deductions, and bonus.</p>
     </div>
-
     <a href="{{ route('yurleis.challenges.salary-calculator.create') }}"
        class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">
       + New Calculation

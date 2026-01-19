@@ -176,7 +176,7 @@ class SalaryRecordController
         $record->delete();
 
         return redirect()->route('yurleis.challenges.salary-calculator.index')
-            ->with('status', 'Registro eliminado.');
+            ->with('status', 'Record deleted successfully.');
     }
 
     private function normalizeShifts(array $overtime): array
