@@ -24,7 +24,7 @@ class LoginController
         if (!Auth::guard('yurleis')->attempt($credentials)) {
             return back()
                 ->withInput($request->only('email'))
-                ->withErrors(['email' => 'Credenciales inválidas.']);
+                ->withErrors(['email' => 'Invalid credentials.']);
         }
 
         $request->session()->regenerate();
