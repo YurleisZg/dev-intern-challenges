@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('elkin_salary_records', function (Blueprint $table) {
             $table->id('record_id');
             $table->unsignedBigInteger('user_id');
-            $table->decimal('gross_salary_input', 10, 2);
+            $table->decimal('gross_salary_input', 15, 2);
             $table->string('status')->default('pending');
             $table->timestamps();
 
