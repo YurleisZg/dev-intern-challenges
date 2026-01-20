@@ -57,7 +57,7 @@ This will automatically fill APP_KEY in your .env.
 
 ```bash
 cd learning-dashboard
-php artisan migrate
+php artisan migrate:fresh
 ```
 This will automatically fill APP_KEY in your .env.
 
