@@ -33,6 +33,7 @@ class SalaryCalculatorController
             'formData' => $formData,
             'result' => $result,
             'records' => $records,
+            'validationErrors' => [],
         ]);
     }
 
@@ -40,6 +41,16 @@ class SalaryCalculatorController
     {
         // Check which action was performed
         $action = $request->input('action');
+        $editingRecordId = $request->input('editing_record_id');
+        $editingRecord = null;
+
+        // If editing, load the record
+        if ($editingRecordId) {
+            $editingRecord = SalaryRecord::with('details')->findOrFail($editingRecordId);
+            if (auth('elkin')->id() !== $editingRecord->user_id) {
+                abort(403, 'Unauthorized');
+            }
+        }
 
         // Handle remove-row action
         if (strpos($action, 'remove-row-') === 0) {
@@ -60,12 +71,19 @@ class SalaryCalculatorController
                     ->get();
             }
 
-            return view('salary-calculator::index', [
+            $response = [
                 'overtimeRows' => $overtimeRows,
                 'formData' => $formData,
                 'result' => null,
                 'records' => $records,
-            ]);
+                'validationErrors' => [],
+            ];
+
+            if ($editingRecord) {
+                $response['editingRecord'] = $editingRecord;
+            }
+
+            return view('salary-calculator::index', $response);
         }
 
         if ($action === 'add-row') {
@@ -76,12 +94,19 @@ class SalaryCalculatorController
             $overtimeRows = $request->session()->get('salary.overtime_rows', 1);
             $formData = $this->getFormData($request);
             
-            return view('salary-calculator::index', [
+            $response = [
                 'overtimeRows' => $overtimeRows,
                 'formData' => $formData,
                 'result' => null,
                 'records' => auth('elkin')->check() ? SalaryRecord::where('user_id', auth('elkin')->id())->with('details')->latest()->limit(10)->get() : [],
-            ]);
+                'validationErrors' => [],
+            ];
+
+            if ($editingRecord) {
+                $response['editingRecord'] = $editingRecord;
+            }
+
+            return view('salary-calculator::index', $response);
         }
 
         $overtimeRows = $request->session()->get('salary.overtime_rows', 1);
@@ -90,18 +115,26 @@ class SalaryCalculatorController
         $grossSalary = (float) ($request->input('gross_salary') ?? 0);
 
         if ($grossSalary <= 0) {
-            return view('salary-calculator::index', [
+            $response = [
                 'overtimeRows' => $overtimeRows,
                 'formData' => $formData,
                 'result' => null,
                 'records' => auth('elkin')->check() ? SalaryRecord::where('user_id', auth('elkin')->id())->with('details')->latest()->limit(10)->get() : [],
                 'errors' => ['gross_salary' => 'Gross salary must be greater than 0'],
-            ]);
+                'validationErrors' => ['Gross salary must be greater than 0'],
+            ];
+
+            if ($editingRecord) {
+                $response['editingRecord'] = $editingRecord;
+            }
+
+            return view('salary-calculator::index', $response);
         }
 
         // Process overtime data
         $overtimeDates = $request->input('overtime_date', []);
         $overtimeTimes = [];
+        $validationErrors = [];
 
         if (is_array($overtimeDates)) {
             foreach ($overtimeDates as $index => $date) {
@@ -109,13 +142,64 @@ class SalaryCalculatorController
                     'start' => $request->input("overtime_start.$index"),
                     'end' => $request->input("overtime_end.$index"),
                 ];
+
+                $startTime = $overtimeTimes[$index]['start'];
+                $endTime = $overtimeTimes[$index]['end'];
+
+                if (!empty($startTime) && !empty($endTime) && strtotime($endTime) < strtotime($startTime)) {
+                    $validationErrors[] = 'Row ' . ($index + 1) . ': end time must be after start time.';
+                }
             }
+        }
+
+        if (!empty($validationErrors)) {
+            $records = auth('elkin')->check() ? SalaryRecord::where('user_id', auth('elkin')->id())->with('details')->latest()->limit(10)->get() : [];
+
+            $response = [
+                'overtimeRows' => $overtimeRows,
+                'formData' => $formData,
+                'result' => null,
+                'records' => $records,
+                'validationErrors' => $validationErrors,
+            ];
+
+            if ($editingRecord) {
+                $response['editingRecord'] = $editingRecord;
+            }
+
+            return view('salary-calculator::index', $response);
         }
 
         $result = SalaryCalculationService::calculateSalary($grossSalary, $overtimeDates, $overtimeTimes);
 
-        // Save the record if user is authenticated
-        if (auth('elkin')->check()) {
+        // If editing, update the record instead of creating a new one
+        if ($editingRecord && auth('elkin')->check()) {
+            $editingRecord->update([
+                'gross_salary_input' => $grossSalary,
+                'status' => 'completed',
+            ]);
+
+            // Delete old details
+            $editingRecord->details()->delete();
+
+            // Save new overtime details
+            if (is_array($overtimeDates) && !empty($overtimeDates)) {
+                foreach ($overtimeDates as $index => $date) {
+                    if (!empty($date)) {
+                        SalaryRecordDetail::create([
+                            'record_id' => $editingRecord->record_id,
+                            'shift_date' => $date,
+                            'start_time' => $overtimeTimes[$index]['start'] ?? null,
+                            'end_time' => $overtimeTimes[$index]['end'] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            // Dispatch event
+            SalaryCalculated::dispatch($editingRecord, $result);
+        } elseif (auth('elkin')->check()) {
+            // Save the record if user is authenticated
             $this->saveRecord($grossSalary, $overtimeDates, $overtimeTimes, $result);
         }
 
@@ -128,13 +212,20 @@ class SalaryCalculatorController
                 ->get();
         }
 
-        return view('salary-calculator::index', [
+        $response = [
             'overtimeRows' => $overtimeRows,
             'formData' => $formData,
             'result' => $result,
             'records' => $records,
-            'message' => 'Record saved successfully!',
-        ]);
+            'message' => $editingRecord ? 'Record updated successfully!' : 'Record saved successfully!',
+            'validationErrors' => [],
+        ];
+
+        if ($editingRecord) {
+            $response['editingRecord'] = $editingRecord;
+        }
+
+        return view('salary-calculator::index', $response);
     }
 
     public function addRow(Request $request)
@@ -170,6 +261,7 @@ class SalaryCalculatorController
             'formData' => $formData,
             'result' => null,
             'records' => $records,
+            'validationErrors' => [],
         ]);
     }
 
@@ -217,59 +309,6 @@ class SalaryCalculatorController
             abort(403, 'Unauthorized');
         }
 
-        // Check which action was performed
-        $action = $request->input('action');
-
-        // Handle add-row action
-        if ($action === 'add-row') {
-            $overtimeRows = $request->session()->get('salary.overtime_rows', count($record->details));
-            $overtimeRows++;
-            $request->session()->put('salary.overtime_rows', $overtimeRows);
-            
-            $formData = $this->getFormData($request);
-            
-            $records = SalaryRecord::where('user_id', auth('elkin')->id())
-                ->with('details')
-                ->latest()
-                ->limit(10)
-                ->get();
-
-            return view('salary-calculator::index', [
-                'editingRecord' => $record,
-                'overtimeRows' => $overtimeRows,
-                'formData' => $formData,
-                'result' => null,
-                'records' => $records,
-            ]);
-        }
-
-        // Handle remove-row action
-        if (strpos($action, 'remove-row-') === 0) {
-            $overtimeRows = $request->session()->get('salary.overtime_rows', count($record->details));
-
-            if ($overtimeRows > 1) {
-                $overtimeRows--;
-                $request->session()->put('salary.overtime_rows', $overtimeRows);
-            }
-
-            $formData = $this->getFormData($request);
-
-            $records = SalaryRecord::where('user_id', auth('elkin')->id())
-                ->with('details')
-                ->latest()
-                ->limit(10)
-                ->get();
-
-            return view('salary-calculator::index', [
-                'editingRecord' => $record,
-                'overtimeRows' => $overtimeRows,
-                'formData' => $formData,
-                'result' => null,
-                'records' => $records,
-            ]);
-        }
-
-        // Default: just load the edit view
         $overtimeRows = count($record->details) > 0 ? count($record->details) : 1;
         $request->session()->put('salary.overtime_rows', $overtimeRows);
 
@@ -293,63 +332,8 @@ class SalaryCalculatorController
             'formData' => $formData,
             'result' => null,
             'records' => $records,
+            'validationErrors' => [],
         ]);
-    }
-
-    public function update(Request $request, $recordId)
-    {
-        $record = SalaryRecord::with('details')->findOrFail($recordId);
-
-        if (auth('elkin')->id() !== $record->user_id) {
-            abort(403, 'Unauthorized');
-        }
-
-        $grossSalary = (float) ($request->input('gross_salary') ?? 0);
-
-        if ($grossSalary <= 0) {
-            return redirect()->back()
-                ->withInput()
-                ->withErrors(['gross_salary' => 'Gross salary must be greater than 0']);
-        }
-
-        // Process overtime data
-        $overtimeDates = $request->input('overtime_date', []);
-        $overtimeTimes = [];
-
-        if (is_array($overtimeDates)) {
-            foreach ($overtimeDates as $index => $date) {
-                $overtimeTimes[$index] = [
-                    'start' => $request->input("overtime_start.$index"),
-                    'end' => $request->input("overtime_end.$index"),
-                ];
-            }
-        }
-
-        // Update record
-        $record->update([
-            'gross_salary_input' => $grossSalary,
-            'status' => 'completed',
-        ]);
-
-        // Delete old details
-        $record->details()->delete();
-
-        // Save new overtime details
-        if (is_array($overtimeDates) && !empty($overtimeDates)) {
-            foreach ($overtimeDates as $index => $date) {
-                if (!empty($date)) {
-                    SalaryRecordDetail::create([
-                        'record_id' => $record->record_id,
-                        'shift_date' => $date,
-                        'start_time' => $overtimeTimes[$index]['start'] ?? null,
-                        'end_time' => $overtimeTimes[$index]['end'] ?? null,
-                    ]);
-                }
-            }
-        }
-
-        return redirect()->route('elkin.challenges.salary-calculator.show', $record->record_id)
-            ->with('success', 'Record updated successfully!');
     }
 
     private function saveRecord($grossSalary, $overtimeDates, $overtimeTimes, $result)
