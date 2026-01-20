@@ -21,12 +21,25 @@
                 <div class="px-4 py-3 border-b border-gray-100 font-bold text-xs uppercase tracking-wider text-gray-500">Saved Records</div>
                 <div class="flex-1 overflow-y-auto p-2 space-y-2 max-h-[300px]">
                     @forelse ($records as $record)
-                        <div class="group border border-gray-100 rounded-lg p-3 hover:border-gray-300 transition-all">
+                        <div class="group border border-gray-100 rounded-lg p-3 hover:border-gray-300 transition-all bg-white">
                             <div class="flex justify-between items-start mb-1">
                                 <span class="text-[10px] font-bold text-gray-400">#{{ $record->record_id }}</span>
                                 <span class="text-[10px] text-gray-400">{{ $record->updated_at->format('M j') }}</span>
                             </div>
                             <div class="text-sm font-bold text-gray-900">${{ number_format($record->gross_salary_input, 2) }}</div>
+                            <div class="mt-2 flex items-center gap-2 text-[10px] text-gray-500">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded bg-gray-100 border border-gray-200 font-semibold">{{ $record->details->count() }} shifts</span>
+                                <span class="text-gray-400">·</span>
+                                <span class="text-gray-500">{{ $record->updated_at->format('Y-m-d') }}</span>
+                            </div>
+                            <div class="mt-3 flex gap-2 text-[10px] font-bold">
+                                <a href="{{ route('elkin.challenges.salary-calculator.show', $record->record_id) }}" class="flex-1 text-center border border-gray-200 rounded px-2 py-1 text-gray-700 hover:bg-gray-50">View</a>
+                                <form method="POST" action="{{ route('elkin.challenges.salary-calculator.delete', $record->record_id) }}" class="flex-1" onsubmit="return confirm('Delete this record?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="w-full text-center border border-gray-200 rounded px-2 py-1 text-red-600 hover:bg-red-50">Delete</button>
+                                </form>
+                            </div>
                         </div>
                     @empty
                         <p class="text-xs text-gray-400 text-center py-6">No records</p>
@@ -47,10 +60,16 @@
                         </div>
                     </div>
 
+                    @php
+                        $filledOvertimeCount = 0;
+                        if (isset($formData['overtime_date']) && is_array($formData['overtime_date'])) {
+                            $filledOvertimeCount = count(array_filter($formData['overtime_date'], fn($v) => !empty($v)));
+                        }
+                    @endphp
                     <div class="md:col-span-2 bg-white rounded-xl border border-gray-200 p-4 shadow-sm flex justify-between items-center">
                         <div>
                             <span class="block text-[10px] font-bold uppercase text-gray-400">Shifts to calculate</span>
-                            <span class="text-xl font-bold text-gray-900">{{ $overtimeRows }} <span class="text-sm font-normal text-gray-400">entries</span></span>
+                            <span class="text-xl font-bold text-gray-900">{{ $filledOvertimeCount }} <span class="text-sm font-normal text-gray-400">entries</span></span>
                         </div>
                         <div class="flex gap-2">
                             <button type="submit" name="action" value="add-row" class="px-4 py-2 border border-gray-200 rounded-lg text-xs font-bold hover:bg-gray-50">+ Add Row</button>
@@ -58,6 +77,17 @@
                         </div>
                     </div>
                 </div>
+
+                @if (!empty($validationErrors))
+                    <div class="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">
+                        <div class="font-bold text-[11px] uppercase tracking-wide">Check shifts</div>
+                        <ul class="mt-1 list-disc list-inside space-y-1 text-[12px]">
+                            @foreach ($validationErrors as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 {{-- TABLA DE ENTRADA --}}
                 <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -161,7 +191,13 @@
                                         <div class="font-bold text-gray-900">{{ \Carbon\Carbon::parse($shift['date'])->format('D, M j') }}</div>
                                         <div class="text-[10px] text-gray-400">{{ $shift['start'] }} - {{ $shift['end'] }}</div>
                                     </td>
-                                    <td class="px-6 py-3 text-center font-bold text-gray-700">{{ number_format($shift['total_hours'], 1) }}h</td>
+                                    <td class="px-6 py-3 text-center font-bold text-gray-700">
+                                        @if($shift['total_hours'] < 1)
+                                            {{ number_format($shift['total_hours'] * 60, 0) }}min
+                                        @else
+                                            {{ number_format($shift['total_hours'], 1) }}h
+                                        @endif
+                                    </td>
                                     <td class="px-6 py-3 text-right font-bold text-gray-900">${{ number_format($shift['shift_total'], 2) }}</td>
                                     <td class="px-6 py-3">
                                         <div class="flex flex-wrap gap-1">
@@ -172,10 +208,19 @@
                                             @endphp
 
                                             @foreach($multiplierGroups as $mult => $items)
+                                                @php
+                                                    $totalHoursInGroup = $items->sum('hours');
+                                                @endphp
                                                 <div class="inline-flex items-center rounded-md border border-gray-200 bg-white px-2 py-1 shadow-sm">
                                                     <span class="text-[10px] font-black text-gray-900">{{ $mult }}x</span>
                                                     <span class="mx-1 text-gray-300">|</span>
-                                                    <span class="text-[9px] text-gray-600 font-medium">{{ $items->count() }}h</span>
+                                                    <span class="text-[9px] text-gray-600 font-medium">
+                                                        @if($totalHoursInGroup < 1)
+                                                            {{ number_format($totalHoursInGroup * 60, 0) }}min
+                                                        @else
+                                                            {{ number_format($totalHoursInGroup, 1) }}h
+                                                        @endif
+                                                    </span>
                                                 </div>
                                             @endforeach
                                             

@@ -113,6 +113,11 @@ class SalaryCalculationService
             // Calculate total hours
             $totalHours = ($end - $start) / 3600;
 
+            // Skip invalid or zero-length shifts to prevent divide-by-zero later
+            if ($totalHours <= 0 || $hourlyRate <= 0) {
+                continue;
+            }
+
             // Fragment calculation by hour
             $segments = [];
             $currentTime = $start;
