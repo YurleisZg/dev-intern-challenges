@@ -3,7 +3,7 @@
     <- Back
   </a>
   <div>
-    <div class="flex items-center justify-between gap-3 mb-3 mt-3">
+    <div class="flex items-center justify-between gap-3 mb-7 mt-3">
       <div>
         <h1 class="text-2xl sm:text-3xl font-bold">Fruit Set Logic</h1>
         <p class="text-slate-600 mt-1 text-sm">
@@ -13,7 +13,7 @@
 
       <a
         href="{{ route('yurleis.challenges.fruit-set.index', ['reset' => 1]) }}"
-        class="px-4 py-1 rounded-full bg-red-500 text-white text-sm"
+        class="px-4 py-1 rounded-MD bg-red-700 text-white text-sm"
       >
         Clear All
       </a>

@@ -14,7 +14,7 @@
   };
 @endphp
 
-<section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 min-h-[420px] flex flex-col">
+<section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 min-h-[420px] flex flex-col">
   <div class="flex items-start justify-between gap-3">
     <div>
       <h2 class="text-xl font-semibold flex items-center gap-2">
@@ -32,7 +32,7 @@
 
   <div class="mt-3">
     <p class="text-xs uppercase tracking-wide text-slate-500">Current Set</p>
-    <div class="mt-2 rounded-2xl border p-2 {{ $setBoxClass }}">
+    <div class="mt-2 rounded-xl border p-2 {{ $setBoxClass }}">
       <code class="text-xs text-slate-900">{{ $renderSet($set) }}</code>
     </div>
   </div>
@@ -61,7 +61,7 @@
       @foreach($fruits as $key => $label)
         <a
           href="{{ route($route, ['action' => 'add', 'basket' => $basket, 'fruit' => $key, 'op' => $op ?: null]) }}"
-          class="px-4 py-1 rounded-2xl text-white text-sm font-semibold text-center {{ $btnAddClass }}"
+          class="px-4 py-1 rounded-xl text-white text-sm font-semibold text-center {{ $btnAddClass }}"
         >
           {{ $label }}
         </a>
