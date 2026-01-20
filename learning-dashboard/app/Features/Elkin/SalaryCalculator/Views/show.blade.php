@@ -84,7 +84,11 @@
                                                 );
                                             @endphp
                                             <div class="text-sm font-semibold text-gray-900">
-                                                {{ number_format($hours, 2) }} hrs
+                                                @if($hours < 1)
+                                                    {{ number_format($hours * 60, 0) }} min
+                                                @else
+                                                    {{ number_format($hours, 2) }} hrs
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -126,14 +130,25 @@
                                     );
                                 }
                             @endphp
-                            {{ number_format($totalHours, 2) }}
+                            @if($totalHours < 1)
+                                {{ number_format($totalHours * 60, 0) }} min
+                            @else
+                                {{ number_format($totalHours, 2) }} hrs
+                            @endif
                         </div>
                     </div>
                     @if ($record->details->count() > 0)
                         <div>
                             <div class="text-xs text-gray-600 mb-1">Avg Hours/Shift</div>
                             <div class="text-2xl font-bold text-gray-900">
-                                {{ number_format($totalHours / $record->details->count(), 2) }}
+                                @php
+                                    $avgHours = $totalHours / $record->details->count();
+                                @endphp
+                                @if($avgHours < 1)
+                                    {{ number_format($avgHours * 60, 0) }} min
+                                @else
+                                    {{ number_format($avgHours, 2) }} hrs
+                                @endif
                             </div>
                         </div>
                     @endif
