@@ -28,7 +28,7 @@ class SalaryCalculatorController
                 ->get();
         }
 
-        return view('salary-calculator::index', [
+        return view('elkin-salary-calculator::index', [
             'overtimeRows' => $overtimeRows,
             'formData' => $formData,
             'result' => $result,
@@ -83,17 +83,17 @@ class SalaryCalculatorController
                 $response['editingRecord'] = $editingRecord;
             }
 
-            return view('salary-calculator::index', $response);
+            return view('elkin-salary-calculator::index', $response);
         }
 
         if ($action === 'add-row') {
             $overtimeRows = $request->session()->get('salary.overtime_rows', 1);
             $overtimeRows++;
             $request->session()->put('salary.overtime_rows', $overtimeRows);
-            
+
             $overtimeRows = $request->session()->get('salary.overtime_rows', 1);
             $formData = $this->getFormData($request);
-            
+
             $response = [
                 'overtimeRows' => $overtimeRows,
                 'formData' => $formData,
@@ -106,7 +106,7 @@ class SalaryCalculatorController
                 $response['editingRecord'] = $editingRecord;
             }
 
-            return view('salary-calculator::index', $response);
+            return view('elkin-salary-calculator::index', $response);
         }
 
         $overtimeRows = $request->session()->get('salary.overtime_rows', 1);
@@ -128,7 +128,7 @@ class SalaryCalculatorController
                 $response['editingRecord'] = $editingRecord;
             }
 
-            return view('salary-calculator::index', $response);
+            return view('elkin-salary-calculator::index', $response);
         }
 
         // Process overtime data
@@ -167,7 +167,7 @@ class SalaryCalculatorController
                 $response['editingRecord'] = $editingRecord;
             }
 
-            return view('salary-calculator::index', $response);
+            return view('elkin-salary-calculator::index', $response);
         }
 
         $result = SalaryCalculationService::calculateSalary($grossSalary, $overtimeDates, $overtimeTimes);
@@ -225,7 +225,7 @@ class SalaryCalculatorController
             $response['editingRecord'] = $editingRecord;
         }
 
-        return view('salary-calculator::index', $response);
+        return view('elkin-salary-calculator::index', $response);
     }
 
     public function addRow(Request $request)
@@ -256,7 +256,7 @@ class SalaryCalculatorController
                 ->get();
         }
 
-        return view('salary-calculator::index', [
+        return view('elkin-salary-calculator::index', [
             'overtimeRows' => $overtimeRows,
             'formData' => $formData,
             'result' => null,
@@ -281,7 +281,7 @@ class SalaryCalculatorController
             abort(403, 'Unauthorized');
         }
 
-        return view('salary-calculator::show', ['record' => $record]);
+        return view('elkin-salary-calculator::show', ['record' => $record]);
     }
 
     public function delete($recordId)
@@ -326,7 +326,7 @@ class SalaryCalculatorController
             ->limit(10)
             ->get();
 
-        return view('salary-calculator::index', [
+        return view('elkin-salary-calculator::index', [
             'editingRecord' => $record,
             'overtimeRows' => $overtimeRows,
             'formData' => $formData,
