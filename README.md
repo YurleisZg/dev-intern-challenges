@@ -10,7 +10,7 @@ Make sure you have:
 - **PHP** 
 - **Composer**
 - **Node.js + npm** 
-- **Database**: MySQL/MariaDB (or whatever your project uses)
+- **Database**: MariaDB 
 - **Git**
 
 ## 📂 Project Structure
