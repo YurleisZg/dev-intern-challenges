@@ -70,6 +70,18 @@ class SalaryCalculationService
     }
 
     /**
+     * Check if shift is on Saturday after 1:00 PM
+     */
+    public static function isSaturdayAfternoon($date, $startTime)
+    {
+        $isSaturday = date('w', strtotime($date)) == 6; // 6 = Saturday
+        $afternoonStart = strtotime('13:00');
+        $start = strtotime($startTime);
+
+        return $isSaturday && $start >= $afternoonStart;
+    }
+
+    /**
      * Calculate hours worked between two times
      */
     public static function calculateHours($startTime, $endTime)
@@ -109,16 +121,21 @@ class SalaryCalculationService
             $baseRate = $hourlyRate;
             $sundayBonus = 0;
             $nightBonus = 0;
+            $saturdayAfternoonBonus = 0;
 
             if (self::isSunday($date)) {
                 $sundayBonus = $hourlyRate * 0.50; // 50% Sunday bonus
+            }
+
+            if (self::isSaturdayAfternoon($date, $startTime)) {
+                $saturdayAfternoonBonus = $hourlyRate * 0.25; // 25% Saturday afternoon bonus
             }
 
             if (self::isNightShift($startTime, $endTime)) {
                 $nightBonus = $hourlyRate * 0.25; // 25% night bonus
             }
 
-            $totalRate = $baseRate + $sundayBonus + $nightBonus;
+            $totalRate = $baseRate + $sundayBonus + $saturdayAfternoonBonus + $nightBonus;
             $shiftTotal = $hours * $totalRate;
 
             $overtimeData[] = [
@@ -128,6 +145,7 @@ class SalaryCalculationService
                 'hours' => $hours,
                 'base_rate' => $baseRate,
                 'sunday_bonus' => $sundayBonus,
+                'saturday_afternoon_bonus' => $saturdayAfternoonBonus,
                 'night_bonus' => $nightBonus,
                 'total_rate' => $totalRate,
                 'shift_total' => $shiftTotal
