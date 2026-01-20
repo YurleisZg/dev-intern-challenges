@@ -138,13 +138,12 @@ class SalaryRecordController
                 'gross_salary' => $result['gross_salary'],
                 'tax' => $result['tax'],
                 'health' => $result['health'],
-                'bonus' => $result['bonus'], // 300 fijo
+                'bonus' => $result['bonus'], 
                 'base_net' => $result['base_net'],
                 'overtime_total' => $result['overtime_total'],
                 'grand_total' => $result['grand_total'],
             ]);
 
-            // replace shifts (simple and safe)
             $record->shifts()->delete();
 
             foreach ($result['shift_rows'] as $row) {
@@ -176,12 +175,11 @@ class SalaryRecordController
         $record->delete();
 
         return redirect()->route('yurleis.challenges.salary-calculator.index')
-            ->with('status', 'Registro eliminado.');
+            ->with('status', 'Record deleted successfully.');
     }
 
     private function normalizeShifts(array $overtime): array
     {
-        // remove empty rows
         $clean = [];
         foreach ($overtime as $row) {
             $date = trim((string)($row['date'] ?? ''));
