@@ -14,7 +14,7 @@ class DashboardService
             new Challenge('Challenge 1', 'Salary Calculator', 'elkin.challenges.salary-calculator.'),
         );
         $stage0to5->addChallenge(
-            new Challenge('Challenge 2', 'Fruit Logic', 'elkin.challenges.fruit-set-logic.'),
+            new Challenge('Challenge 2', 'Fruit Logic', 'elkin.challenges.fruit-set-logic.index'),
         );
         $stage0to5->addChallenge(
             new Challenge('Challenge 3', 'Toggle Time Attack', 'elkin.challenges.toogle-time-attack.')

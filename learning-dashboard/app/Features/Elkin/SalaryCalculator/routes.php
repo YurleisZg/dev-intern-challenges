@@ -2,7 +2,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/',function(){
-    return view('salary-calculator::index');
+    return "<H1>TODO LIST</H1>";
 });
 
 Route::get('/login',function(){

@@ -11,17 +11,35 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (!Schema::hasTable('yurleis_users')) {
+            Schema::create('yurleis_users', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->rememberToken();
+                $table->timestamps();
+            });
+
+            return;
+        }
+
         Schema::table('yurleis_users', function (Blueprint $table) {
-              if (!Schema::hasColumn('yurleis_users', 'name')) {
-                $table->string('name')->nullable(); // quita nullable si puedes
+            if (!Schema::hasColumn('yurleis_users', 'name')) {
+                $table->string('name');
             }
 
             if (!Schema::hasColumn('yurleis_users', 'email')) {
-                $table->string('email')->unique()->nullable();
+                $table->string('email')->unique();
+            }
+
+            if (!Schema::hasColumn('yurleis_users', 'email_verified_at')) {
+                $table->timestamp('email_verified_at')->nullable();
             }
 
             if (!Schema::hasColumn('yurleis_users', 'password')) {
-                $table->string('password')->nullable();
+                $table->string('password');
             }
 
             if (!Schema::hasColumn('yurleis_users', 'remember_token')) {
@@ -39,8 +57,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('yurleis_users', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('yurleis_users');
     }
 };
