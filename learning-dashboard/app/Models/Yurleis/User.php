@@ -21,6 +21,11 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Yurleis\SalaryRecord::class, 'yurleis_user_id');
     }
 
+    public function toggleGames()
+    {
+        return $this->hasMany(ToggleGame::class, 'yurleis_user_id');
+    }
+
     protected function casts(): array
     {
         return [

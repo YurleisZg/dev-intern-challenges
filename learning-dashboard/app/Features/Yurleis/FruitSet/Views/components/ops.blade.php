@@ -29,7 +29,7 @@
     @foreach($ops as $key => $label)
       <a
         href="{{ route($route, ['op' => $key]) }}"
-        class="px-2 py-2 rounded-2xl border text-sm font-semibold 
+        class="px-2 py-2 rounded-xl border text-xs 
           {{ ($op ?? '') === $key  }}"
       >
         {{ $label }}

@@ -97,8 +97,6 @@ class SalaryCalculatorService
 
         $isSunday = $sundayMinutes > 0;
 
-        // For Sunday we split day vs night
-        // IMPORTANT: dayMinutes must be based on Sunday minutes, not total overtime minutes
         $dayMinutes = max(0, $sundayMinutes - $nightMinutes);
 
         $dayMultiplier = 1.0 + ($isSunday ? 0.50 : 0.0); // Sunday day = 1.50
