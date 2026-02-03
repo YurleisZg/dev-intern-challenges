@@ -18,6 +18,14 @@ class DashboardYurleisService
             new Challenge('Fruit Logic', 'An interactive mini-game with two fruit baskets (Basket A and Basket B)', 'yurleis.challenges.fruit-set.index'),
         );
 
+        $stages->addChallenge(
+            new Challenge('Toggle Time Attack', 'Game where you quickly switch elements on and off before time runs out', 'yurleis.challenges.toggle-time-attack.index'),
+         );
+
+          $stages->addChallenge(
+            new Challenge('Task Manager', 'A simple task management application to organize your to-dos', 'yurleis.challenges.fruit-set.index'),
+         );
+
         return [
             $stages,
         ];
